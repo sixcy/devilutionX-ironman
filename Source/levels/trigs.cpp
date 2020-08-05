@@ -406,11 +406,16 @@ bool ForceTownTrig()
 	return false;
 }
 
+constexpr bool IsIronman = true;
+constexpr const char *ImNoBacktrackMsg = "Ironman\nGoing up is forbidden!";
+
 bool ForceL1Trig()
 {
 	for (const uint16_t tileId : L1UpList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			if (currlevel > 1)
+			if (IsIronman)
+				InfoString = _(ImNoBacktrackMsg);
+			else if (currlevel > 1)
 				InfoString = fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
 			else
 				InfoString = _("Up to town");
@@ -446,7 +451,7 @@ bool ForceL2Trig()
 					int dx = abs(trigs[j].position.x - cursPosition.x);
 					int dy = abs(trigs[j].position.y - cursPosition.y);
 					if (dx < 4 && dy < 4) {
-						InfoString = fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
+						InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
 						cursPosition = trigs[j].position;
 						return true;
 					}
@@ -475,7 +480,7 @@ bool ForceL2Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -492,7 +497,7 @@ bool ForceL3Trig()
 {
 	for (const uint16_t tileId : L3UpList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
+			InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 					int dx = abs(trigs[j].position.x - cursPosition.x);
@@ -527,7 +532,7 @@ bool ForceL3Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -544,7 +549,7 @@ bool ForceL4Trig()
 {
 	for (const uint16_t tileId : L4UpList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
+			InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(fmt::runtime(_("Up to level {:d}")), currlevel - 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 					cursPosition = trigs[j].position;
@@ -574,7 +579,7 @@ bool ForceL4Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -880,12 +885,16 @@ void CheckTriggers()
 			}
 			break;
 		case WM_DIABPREVLVL:
+			if (IsIronman)
+				return;
 			StartNewLvl(myPlayer, trigs[i]._tmsg, currlevel - 1);
 			break;
 		case WM_DIABRTNLVL:
 			StartNewLvl(myPlayer, trigs[i]._tmsg, GetMapReturnLevel());
 			break;
 		case WM_DIABTOWNWARP:
+			if (IsIronman)
+				return;
 			if (gbIsMultiplayer) {
 				bool abort = false;
 				diablo_message abortflag;
@@ -921,6 +930,8 @@ void CheckTriggers()
 			StartNewLvl(myPlayer, trigs[i]._tmsg, trigs[i]._tlvl);
 			break;
 		case WM_DIABTWARPUP:
+			if (IsIronman)
+				return;
 			TWarpFrom = currlevel;
 			StartNewLvl(myPlayer, trigs[i]._tmsg, 0);
 			break;
