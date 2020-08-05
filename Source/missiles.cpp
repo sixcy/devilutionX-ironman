@@ -12,6 +12,7 @@
 #include "controls/plrctrls.h"
 #include "cursor.h"
 #include "dead.h"
+#include "ironman.h"
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -3352,7 +3353,7 @@ void ProcessTownPortal(Missile &missile)
 	for (Player &player : Players) {
 		if (player.plractive && player.isOnActiveLevel() && !player._pLvlChanging && player._pmode == PM_STAND && player.position.tile == missile.position.tile) {
 			ClrPlrPath(player);
-			if (&player == MyPlayer) {
+			if (&player == MyPlayer && !IsIronman) {
 				NetSendCmdParam1(true, CMD_WARP, missile._misource);
 				player._pmode = PM_NEWLVL;
 			}

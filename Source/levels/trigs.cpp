@@ -14,6 +14,7 @@
 #include "cursor.h"
 #include "error.h"
 #include "init.h"
+#include "ironman.h"
 #include "utils/language.h"
 #include "utils/utf8.hpp"
 
@@ -406,7 +407,6 @@ bool ForceTownTrig()
 	return false;
 }
 
-constexpr bool IsIronman = true;
 constexpr const char *ImNoBacktrackMsg = "Ironman\nGoing up is forbidden!";
 
 bool ForceL1Trig()

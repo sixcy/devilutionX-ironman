@@ -21,6 +21,7 @@
 #include "engine/trn.hpp"
 #include "hwcursor.hpp"
 #include "inv.h"
+#include "ironman.h"
 #include "levels/trigs.h"
 #include "missiles.h"
 #include "options.h"
@@ -323,7 +324,7 @@ void CheckTown()
 		if (missile._mitype == MissileID::TownPortal) {
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
-				InfoString = _("Town Portal");
+				InfoString = IsIronman ? _("Ironman: TP forbidden!") : _("Town Portal");
 				AddPanelString(fmt::format(fmt::runtime(_("from {:s}")), Players[missile._misource]._pName));
 				cursPosition = missile.position.tile;
 			}
