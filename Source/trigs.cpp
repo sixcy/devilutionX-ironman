@@ -12,6 +12,8 @@
 #include "cursor.h"
 #include "error.h"
 #include "init.h"
+#include "interfac.h"
+#include "ironman.h"
 #include "utils/language.h"
 #include "utils/utf8.hpp"
 
@@ -149,7 +151,7 @@ void InitL1Triggers()
 			for (int i = 0; i < MAXDUNX; i++) {
 				if (dPiece[i][j] == 129) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 					numtrigs++;
 				}
 				if (dPiece[i][j] == 115) {
@@ -191,13 +193,13 @@ void InitL2Triggers()
 		for (int i = 0; i < MAXDUNX; i++) {
 			if (dPiece[i][j] == 267 && (i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
 			if (dPiece[i][j] == 559) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -220,7 +222,7 @@ void InitL3Triggers()
 			for (int i = 0; i < MAXDUNX; i++) {
 				if (dPiece[i][j] == 171) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 					numtrigs++;
 				}
 
@@ -232,7 +234,7 @@ void InitL3Triggers()
 
 				if (dPiece[i][j] == 549) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 					numtrigs++;
 				}
 			}
@@ -271,13 +273,13 @@ void InitL4Triggers()
 		for (int i = 0; i < MAXDUNX; i++) {
 			if (dPiece[i][j] == 83) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
 			if (dPiece[i][j] == 422) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -405,12 +407,16 @@ bool ForceTownTrig()
 	return false;
 }
 
+constexpr const char *ImNoBacktrackMsg = "Ironman\nGoing up is forbidden!";
+
 bool ForceL1Trig()
 {
 	if (currlevel < 17) {
 		for (int i = 0; L1UpList[i] != -1; i++) {
 			if (dPiece[cursPosition.x][cursPosition.y] == L1UpList[i]) {
-				if (currlevel > 1)
+				if (IsIronman)
+					InfoString = _(ImNoBacktrackMsg);
+				else if (currlevel > 1)
 					InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
 				else
 					InfoString = _("Up to town");
@@ -491,7 +497,7 @@ bool ForceL2Trig()
 					int dx = abs(trigs[j].position.x - cursPosition.x);
 					int dy = abs(trigs[j].position.y - cursPosition.y);
 					if (dx < 4 && dy < 4) {
-						InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
+						InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(_("Up to level {:d}"), currlevel - 1);
 						cursPosition = trigs[j].position;
 						return true;
 					}
@@ -520,7 +526,7 @@ bool ForceL2Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -538,7 +544,7 @@ bool ForceL3Trig()
 	if (currlevel < 17) {
 		for (int i = 0; L3UpList[i] != -1; ++i) {
 			if (dPiece[cursPosition.x][cursPosition.y] == L3UpList[i]) {
-				InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
+				InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(_("Up to level {:d}"), currlevel - 1);
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 						int dx = abs(trigs[j].position.x - cursPosition.x);
@@ -616,7 +622,7 @@ bool ForceL3Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -633,7 +639,7 @@ bool ForceL4Trig()
 {
 	for (int i = 0; L4UpList[i] != -1; ++i) {
 		if (dPiece[cursPosition.x][cursPosition.y] == L4UpList[i]) {
-			InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
+			InfoString = IsIronman ? ImNoBacktrackMsg : fmt::format(_("Up to level {:d}"), currlevel - 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 					cursPosition = trigs[j].position;
@@ -663,7 +669,7 @@ bool ForceL4Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = _("Up to town");
+							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -822,12 +828,16 @@ void CheckTriggers()
 			}
 			break;
 		case WM_DIABPREVLVL:
+			if (IsIronman)
+				return;
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, currlevel - 1);
 			break;
 		case WM_DIABRTNLVL:
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, ReturnLevel);
 			break;
 		case WM_DIABTOWNWARP:
+			if (IsIronman)
+				return;
 			if (gbIsMultiplayer) {
 				bool abort = false;
 				diablo_message abortflag;
@@ -863,8 +873,12 @@ void CheckTriggers()
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, trigs[i]._tlvl);
 			break;
 		case WM_DIABTWARPUP:
+			if (IsIronman)
+				return;
 			TWarpFrom = currlevel;
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, 0);
+			break;
+		case WM_DIABNOTRIGGER:
 			break;
 		default:
 			app_fatal("Unknown trigger msg");
