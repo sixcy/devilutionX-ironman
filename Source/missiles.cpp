@@ -11,6 +11,7 @@
 #include "controls/plrctrls.h"
 #include "cursor.h"
 #include "dead.h"
+#include "ironman.h"
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -3339,7 +3340,7 @@ void MI_Town(Missile &missile)
 		auto &player = Players[p];
 		if (player.plractive && currlevel == player.plrlevel && !player._pLvlChanging && player._pmode == PM_STAND && player.position.tile == missile.position.tile) {
 			ClrPlrPath(player);
-			if (p == MyPlayerId) {
+			if (p == MyPlayerId && !IsIronman) {
 				NetSendCmdParam1(true, CMD_WARP, missile._misource);
 				player._pmode = PM_NEWLVL;
 			}

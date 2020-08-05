@@ -18,6 +18,7 @@
 #include "engine/render/cel_render.hpp"
 #include "hwcursor.hpp"
 #include "inv.h"
+#include "ironman.h"
 #include "missiles.h"
 #include "options.h"
 #include "qol/itemlabels.h"
@@ -232,7 +233,7 @@ void CheckTown()
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
 				ClearPanel();
-				InfoString = _("Town Portal");
+				InfoString = IsIronman ? _("Ironman: TP forbidden!") : _("Town Portal");
 				AddPanelString(fmt::format(_("from {:s}"), Players[missile._misource]._pName));
 				cursPosition = missile.position.tile;
 			}
