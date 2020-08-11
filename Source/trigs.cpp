@@ -148,7 +148,7 @@ void InitL1Triggers()
 	if (currlevel < 17) {
 		for (int j = 0; j < MAXDUNY; j++) {
 			for (int i = 0; i < MAXDUNX; i++) {
-				if (dPiece[i][j] == 129) {
+				if (!IsIronman && dPiece[i][j] == 129) {
 					trigs[numtrigs].position = { i, j };
 					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 					numtrigs++;
@@ -190,13 +190,13 @@ void InitL2Triggers()
 	numtrigs = 0;
 	for (int j = 0; j < MAXDUNY; j++) {
 		for (int i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 267 && (i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
+			if (!IsIronman && dPiece[i][j] == 267 && (i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (dPiece[i][j] == 559) {
+			if (!IsIronman && dPiece[i][j] == 559) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
@@ -219,7 +219,7 @@ void InitL3Triggers()
 		numtrigs = 0;
 		for (int j = 0; j < MAXDUNY; j++) {
 			for (int i = 0; i < MAXDUNX; i++) {
-				if (dPiece[i][j] == 171) {
+				if (!IsIronman && dPiece[i][j] == 171) {
 					trigs[numtrigs].position = { i, j };
 					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 					numtrigs++;
@@ -231,7 +231,7 @@ void InitL3Triggers()
 					numtrigs++;
 				}
 
-				if (dPiece[i][j] == 549) {
+				if (!IsIronman && dPiece[i][j] == 549) {
 					trigs[numtrigs].position = { i, j };
 					trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
 					numtrigs++;
@@ -270,13 +270,13 @@ void InitL4Triggers()
 	numtrigs = 0;
 	for (int j = 0; j < MAXDUNY; j++) {
 		for (int i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 83) {
+			if (!IsIronman && dPiece[i][j] == 83) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (dPiece[i][j] == 422) {
+			if (IsIronman && dPiece[i][j] == 422) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
