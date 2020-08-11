@@ -13,9 +13,11 @@
 #include "error.h"
 #include "gmenu.h"
 #include "init.h"
+#include "ironman.h"
 #include "loadsave.h"
 #include "options.h"
 #include "pfile.h"
+#include "player.h"
 #include "qol/floatingnumbers.h"
 #include "utils/language.h"
 
@@ -42,6 +44,16 @@ TMenuItem sgSingleMenu[] = {
 	{ GMENU_ENABLED, N_("Load Game"), &gamemenu_load_game },
 	{ GMENU_ENABLED, N_("Quit Game"), &gamemenu_quit_game },
 	{ GMENU_ENABLED, nullptr,         nullptr             }
+	// clang-format on
+};
+
+/** Same as above, for Ironman. */
+TMenuItem sgSingleMenuIM[] = {
+	// clang-format off
+	// dwFlags,      pszStr,         fnMenu
+	{ GMENU_ENABLED, "Save and Quit", &gamemenu_save_quit_game  },
+	{ GMENU_ENABLED, "Options",       &GamemenuOptions         },
+	{ GMENU_ENABLED, NULL,            NULL }
 	// clang-format on
 };
 /** Contains the game menu items of the multi player menu. */
@@ -84,6 +96,13 @@ void GamemenuUpdateSingle()
 	bool enable = MyPlayer->_pmode != PM_DEATH && !MyPlayerIsDead;
 
 	sgSingleMenu[0].setEnabled(enable);
+}
+
+void GamemenuUpdateSingleIM()
+{
+	bool enable = Players[MyPlayerId]._pmode != PM_DEATH && !MyPlayerIsDead;
+
+	sgSingleMenuIM[0].setEnabled(enable);
 }
 
 void GamemenuUpdateMulti()
@@ -343,10 +362,18 @@ void gamemenu_save_game(bool /*bActivate*/)
 	SetEventHandler(saveProc);
 }
 
+void gamemenu_save_quit_game(bool bActivate)
+{
+	gamemenu_save_game(bActivate);
+	gamemenu_quit_game(bActivate);
+}
+
 void gamemenu_on()
 {
 	if (!gbIsMultiplayer) {
-		gmenu_set_items(sgSingleMenu, GamemenuUpdateSingle);
+		auto *menu = IsIronman ? sgSingleMenuIM : sgSingleMenu;
+		auto *update = IsIronman ? GamemenuUpdateSingleIM : GamemenuUpdateSingle;
+		gmenu_set_items(menu, update);
 	} else {
 		gmenu_set_items(sgMultiMenu, GamemenuUpdateMulti);
 	}
