@@ -151,7 +151,7 @@ void InitL1Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 128) {
+			if (!IsIronman && dPiece[i][j] == 128) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
@@ -171,13 +171,13 @@ void InitL2Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 266 && (!Quests[Q_SCHAMB].IsAvailable() || i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
+			if (!IsIronman && dPiece[i][j] == 266 && (!Quests[Q_SCHAMB].IsAvailable() || i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (dPiece[i][j] == 558) {
+			if (!IsIronman && dPiece[i][j] == 558) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
@@ -199,7 +199,7 @@ void InitL3Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 170) {
+			if (!IsIronman && dPiece[i][j] == 170) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
@@ -226,13 +226,13 @@ void InitL4Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (dPiece[i][j] == 82) {
+			if (!IsIronman && dPiece[i][j] == 82) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (dPiece[i][j] == 421) {
+			if (IsIronman && dPiece[i][j] == 421) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
