@@ -409,6 +409,7 @@ bool ForceTownTrig()
 }
 
 constexpr const char *ImNoBacktrackMsg = "Ironman\nGoing up is forbidden!";
+constexpr const char *ImMustKillAllMsg = "All monsters must be killed";
 
 bool ForceL1Trig()
 {
@@ -430,7 +431,7 @@ bool ForceL1Trig()
 	}
 	for (const uint16_t tileId : L1DownList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABNEXTLVL) {
 					cursPosition = trigs[j].position;
@@ -463,7 +464,7 @@ bool ForceL2Trig()
 
 	for (const uint16_t tileId : L2DownList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABNEXTLVL) {
 					cursPosition = trigs[j].position;
@@ -515,7 +516,7 @@ bool ForceL3Trig()
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId
 		    || dPiece[cursPosition.x + 1][cursPosition.y] == tileId
 		    || dPiece[cursPosition.x + 2][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABNEXTLVL) {
 					cursPosition = trigs[j].position;
@@ -562,7 +563,7 @@ bool ForceL4Trig()
 
 	for (const uint16_t tileId : L4DownList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Down to level {:d}")), currlevel + 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABNEXTLVL) {
 					cursPosition = trigs[j].position;
@@ -593,7 +594,7 @@ bool ForceL4Trig()
 	if (currlevel == 15) {
 		for (const uint16_t tileId : L4PentaList) {
 			if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-				InfoString = _("Down to Diablo");
+				InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : _("Down to Diablo");
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABNEXTLVL) {
 						cursPosition = trigs[j].position;
@@ -722,7 +723,7 @@ bool ForceSKingTrig()
 {
 	for (const uint16_t tileId : L1UpList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_SKELKING]._qlevel);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_SKELKING]._qlevel);
 			cursPosition = trigs[0].position;
 
 			return true;
@@ -736,7 +737,7 @@ bool ForceSChambTrig()
 {
 	for (const uint16_t tileId : L2DownList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_SCHAMB]._qlevel);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_SCHAMB]._qlevel);
 			cursPosition = trigs[0].position;
 
 			return true;
@@ -750,7 +751,7 @@ bool ForcePWaterTrig()
 {
 	for (const uint16_t tileId : L3DownList) {
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-			InfoString = fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_PWATER]._qlevel);
+			InfoString = IsIronman && ActiveMonsterCount > MAX_PLRS ? _(ImMustKillAllMsg) : fmt::format(fmt::runtime(_("Back to Level {:d}")), Quests[Q_PWATER]._qlevel);
 			cursPosition = trigs[0].position;
 
 			return true;
