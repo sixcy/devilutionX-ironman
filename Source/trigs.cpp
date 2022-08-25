@@ -11,8 +11,9 @@
 #include "controls/plrctrls.h"
 #include "cursor.h"
 #include "error.h"
-#include "ironman.h"
 #include "init.h"
+#include "interfac.h"
+#include "ironman.h"
 #include "utils/language.h"
 #include "utils/utf8.hpp"
 
@@ -148,9 +149,9 @@ void InitL1Triggers()
 	if (currlevel < 17) {
 		for (int j = 0; j < MAXDUNY; j++) {
 			for (int i = 0; i < MAXDUNX; i++) {
-				if (!IsIronman && dPiece[i][j] == 129) {
+				if (dPiece[i][j] == 129) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 					numtrigs++;
 				}
 				if (dPiece[i][j] == 115) {
@@ -190,15 +191,15 @@ void InitL2Triggers()
 	numtrigs = 0;
 	for (int j = 0; j < MAXDUNY; j++) {
 		for (int i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 267 && (i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
+			if (dPiece[i][j] == 267 && (i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (!IsIronman && dPiece[i][j] == 559) {
+			if (dPiece[i][j] == 559) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -219,9 +220,9 @@ void InitL3Triggers()
 		numtrigs = 0;
 		for (int j = 0; j < MAXDUNY; j++) {
 			for (int i = 0; i < MAXDUNX; i++) {
-				if (!IsIronman && dPiece[i][j] == 171) {
+				if (dPiece[i][j] == 171) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 					numtrigs++;
 				}
 
@@ -231,9 +232,9 @@ void InitL3Triggers()
 					numtrigs++;
 				}
 
-				if (!IsIronman && dPiece[i][j] == 549) {
+				if (dPiece[i][j] == 549) {
 					trigs[numtrigs].position = { i, j };
-					trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+					trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 					numtrigs++;
 				}
 			}
@@ -270,15 +271,15 @@ void InitL4Triggers()
 	numtrigs = 0;
 	for (int j = 0; j < MAXDUNY; j++) {
 		for (int i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 83) {
+			if (dPiece[i][j] == 83) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (IsIronman && dPiece[i][j] == 422) {
+			if (dPiece[i][j] == 422) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -876,6 +877,8 @@ void CheckTriggers()
 				return;
 			TWarpFrom = currlevel;
 			StartNewLvl(MyPlayerId, trigs[i]._tmsg, 0);
+			break;
+		case WM_DIABNOTRIGGER:
 			break;
 		default:
 			app_fatal("Unknown trigger msg");

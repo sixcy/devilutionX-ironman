@@ -29,6 +29,10 @@ enum interface_mode : uint16_t {
 	WM_DIABRETOWN   = 0x409,
 	WM_DIABNEWGAME  = 0x40A,
 	WM_DIABLOADGAME = 0x40B,
+
+	// trigger that does nothing. Helpful to remove a trigger without altering
+	// the monster generation algorithm.
+	WM_DIABNOTRIGGER = 0x40C,
 	// clang-format on
 
 	WM_FIRST = WM_DIABNEXTLVL,
