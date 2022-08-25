@@ -8,6 +8,7 @@
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
 #include "gendung.h"
+#include "ironman.h"
 #include "monster.h"
 #include "multi.h"
 #include "objdat.h"
@@ -240,7 +241,7 @@ bool PlaceMiniSet(const BYTE *miniset, int tmin, int tmax, int cx, int cy, bool 
 		}
 	}
 
-	if (currlevel == 15 && Quests[Q_BETRAYER]._qactive >= QUEST_ACTIVE) { /// Lazarus staff skip bug fixed
+	if (currlevel == 15 && Quests[Q_BETRAYER]._qactive >= (IsIronman ? QUEST_INIT : QUEST_ACTIVE)) { /// Lazarus staff skip bug fixed
 		Quests[Q_BETRAYER].position = { sx + 1, sy + 1 };
 	}
 	if (setview) {
