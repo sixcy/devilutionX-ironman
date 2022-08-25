@@ -3353,7 +3353,7 @@ void ProcessTownPortal(Missile &missile)
 	for (Player &player : Players) {
 		if (player.plractive && player.isOnActiveLevel() && !player._pLvlChanging && player._pmode == PM_STAND && player.position.tile == missile.position.tile) {
 			ClrPlrPath(player);
-			if (&player == MyPlayer && !IsIronman) {
+			if (&player == MyPlayer && (!IsIronman || missile._mitype != MissileID::RedPortal)) {
 				NetSendCmdParam1(true, CMD_WARP, missile._misource);
 				player._pmode = PM_NEWLVL;
 			}

@@ -18,12 +18,16 @@
 #include "engine/render/text_render.hpp"
 #include "engine/world_tile.hpp"
 #include "init.h"
+#include "ironman.h"
+#include "itemdat.h"
+#include "items.h"
 #include "levels/gendung.h"
 #include "levels/town.h"
 #include "levels/trigs.h"
 #include "minitext.h"
 #include "missiles.h"
 #include "monster.h"
+#include "objects.h"
 #include "options.h"
 #include "panels/ui_panels.hpp"
 #include "stores.h"
@@ -318,6 +322,11 @@ void InitialiseQuestPools(uint32_t seed, Quest quests[])
 		quests[QuestGroup4[randomIndex]]._qactive = QUEST_NOTAVAIL;
 }
 
+static bool IMQuestActive(Quest &q)
+{
+	return q._qactive == QUEST_ACTIVE;
+}
+
 void CheckQuests()
 {
 	if (gbIsSpawn)
@@ -332,6 +341,68 @@ void CheckQuests()
 
 	if (UseMultiplayerQuests()) {
 		return;
+	}
+
+	if (IsIronman) {
+		auto &pwater = Quests[Q_PWATER];
+		if (pwater._qactive == QUEST_DONE && pwater._qvar1 != 2) {
+			InitQTextMsg(TEXT_POISON5);
+			SpawnUnique(UITEM_TRING, MyPlayer->GetTargetPosition() + Direction::South);
+			pwater._qvar1 = 2;
+		}
+
+		auto &ltbanner = Quests[Q_LTBANNER];
+		if (IMQuestActive(ltbanner) && RemoveInventoryItemById(*MyPlayer, IDI_BANNER)) {
+			// Replicate merchant logic
+			SpawnUnique(UITEM_HARCREST, MyPlayer->GetTargetPosition());
+			InitQTextMsg(TEXT_BANNER3);
+			ltbanner._qactive = QUEST_DONE;
+			ltbanner._qvar1 = 3;
+			// Trigger the update of Snotspill
+			ResyncQuests();
+		}
+
+		auto &rock = Quests[Q_ROCK];
+		if (IMQuestActive(rock) && RemoveInventoryItemById(*MyPlayer, IDI_ROCK)) {
+			rock._qactive = QUEST_DONE;
+			SpawnUnique(UITEM_INFRARING, MyPlayer->GetTargetPosition());
+			InitQTextMsg(TEXT_INFRA7);
+		}
+
+		auto &mushroom = Quests[Q_MUSHROOM];
+		if (mushroom._qactive == QUEST_INIT && currlevel == 8)
+			mushroom._qactive = QUEST_ACTIVE;
+		if (mushroom._qvar1 != QS_MUSHGIVEN && RemoveInventoryItemById(*MyPlayer, IDI_MUSHROOM)) {
+			SpawnQuestItem(IDI_SPECELIX, MyPlayer->GetTargetPosition(), 0, 0, true);
+			InitQTextMsg(TEXT_MUSH12);
+			mushroom._qvar1 = QS_MUSHGIVEN;
+		}
+		if (mushroom._qactive != QUEST_DONE && mushroom._qvar1 == QS_MUSHGIVEN && HasInventoryOrBeltItemWithId(*MyPlayer, IDI_SPECELIX)) {
+			mushroom._qactive = QUEST_DONE;
+		}
+
+		auto &anvil = Quests[Q_ANVIL];
+		if (IMQuestActive(anvil) && RemoveInventoryItemById(*MyPlayer, IDI_ANVIL)) {
+			anvil._qactive = QUEST_DONE;
+			SpawnUnique(UITEM_GRISWOLD, MyPlayer->GetTargetPosition());
+			InitQTextMsg(TEXT_ANVIL7);
+		}
+
+		auto &betrayer = Quests[Q_BETRAYER];
+		if (betrayer._qactive == QUEST_INIT && RemoveInventoryItemById(*MyPlayer, IDI_LAZSTAFF)) {
+			betrayer._qactive = QUEST_ACTIVE;
+			betrayer._qvar1 = 2;
+			InitQTextMsg(TEXT_VILE1);
+		}
+
+		auto &veil = Quests[Q_VEIL];
+		if (veil._qactive == QUEST_INIT && currlevel == 14)
+			veil._qactive = QUEST_ACTIVE;
+		if (IMQuestActive(veil) && RemoveInventoryItemById(*MyPlayer, IDI_GLDNELIX)) {
+			SpawnUnique(UITEM_STEELVEIL, MyPlayer->GetTargetPosition() + Direction::South);
+			veil._qactive = QUEST_DONE;
+			InitQTextMsg(TEXT_VEIL11);
+		}
 	}
 
 	if (currlevel == quest._qlevel

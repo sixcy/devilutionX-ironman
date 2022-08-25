@@ -9,6 +9,7 @@
 
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
+#include "ironman.h"
 #include "levels/gendung.h"
 #include "monster.h"
 #include "multi.h"
