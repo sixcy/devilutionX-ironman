@@ -407,7 +407,6 @@ bool ForceTownTrig()
 	return false;
 }
 
-constexpr const char *ImNoBacktrackMsg = "Ironman\nGoing up is forbidden!";
 constexpr const char *ImMustKillAllMsg = "All monsters must be killed";
 
 bool ForceL1Trig()
@@ -415,9 +414,7 @@ bool ForceL1Trig()
 	if (currlevel < 17) {
 		for (int i = 0; L1UpList[i] != -1; i++) {
 			if (dPiece[cursPosition.x][cursPosition.y] == L1UpList[i]) {
-				if (IsIronman)
-					InfoString = _(ImNoBacktrackMsg);
-				else if (currlevel > 1)
+				if (currlevel > 1)
 					InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
 				else
 					InfoString = _("Up to town");
@@ -502,7 +499,7 @@ bool ForceL2Trig()
 					int dx = abs(trigs[j].position.x - cursPosition.x);
 					int dy = abs(trigs[j].position.y - cursPosition.y);
 					if (dx < 4 && dy < 4) {
-						InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(_("Up to level {:d}"), currlevel - 1);
+						InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
 						cursPosition = trigs[j].position;
 						return true;
 					}
@@ -533,7 +530,7 @@ bool ForceL2Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
+							InfoString = _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -551,7 +548,7 @@ bool ForceL3Trig()
 	if (currlevel < 17) {
 		for (int i = 0; L3UpList[i] != -1; ++i) {
 			if (dPiece[cursPosition.x][cursPosition.y] == L3UpList[i]) {
-				InfoString = IsIronman ? _(ImNoBacktrackMsg) : fmt::format(_("Up to level {:d}"), currlevel - 1);
+				InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
 				for (int j = 0; j < numtrigs; j++) {
 					if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 						int dx = abs(trigs[j].position.x - cursPosition.x);
@@ -633,7 +630,7 @@ bool ForceL3Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
+							InfoString = _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
@@ -650,7 +647,7 @@ bool ForceL4Trig()
 {
 	for (int i = 0; L4UpList[i] != -1; ++i) {
 		if (dPiece[cursPosition.x][cursPosition.y] == L4UpList[i]) {
-			InfoString = IsIronman ? ImNoBacktrackMsg : fmt::format(_("Up to level {:d}"), currlevel - 1);
+			InfoString = fmt::format(_("Up to level {:d}"), currlevel - 1);
 			for (int j = 0; j < numtrigs; j++) {
 				if (trigs[j]._tmsg == WM_DIABPREVLVL) {
 					cursPosition = trigs[j].position;
@@ -682,7 +679,7 @@ bool ForceL4Trig()
 						int dx = abs(trigs[j].position.x - cursPosition.x);
 						int dy = abs(trigs[j].position.y - cursPosition.y);
 						if (dx < 4 && dy < 4) {
-							InfoString = IsIronman ? _(ImNoBacktrackMsg) : _("Up to town");
+							InfoString = _("Up to town");
 							cursPosition = trigs[j].position;
 							return true;
 						}
