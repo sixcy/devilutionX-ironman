@@ -3340,7 +3340,7 @@ void MI_Town(Missile &missile)
 		auto &player = Players[p];
 		if (player.plractive && currlevel == player.plrlevel && !player._pLvlChanging && player._pmode == PM_STAND && player.position.tile == missile.position.tile) {
 			ClrPlrPath(player);
-			if (p == MyPlayerId && !IsIronman) {
+			if (p == MyPlayerId && (!IsIronman || missile._mimfnum != MIS_RPORTAL)) {
 				NetSendCmdParam1(true, CMD_WARP, missile._misource);
 				player._pmode = PM_NEWLVL;
 			}
