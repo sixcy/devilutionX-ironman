@@ -15,6 +15,7 @@
 #include "engine.h"
 #include "engine/load_file.hpp"
 #include "init.h"
+#include "ironman.h"
 #include "loadsave.h"
 #include "menu.h"
 #include "mpq/mpq_common.hpp"
@@ -54,6 +55,7 @@ char hero_names[MAX_CHARACTERS][PlayerNameLength];
 std::string GetSavePath(uint32_t saveNum, string_view savePrefix = {})
 {
 	return StrCat(paths::PrefPath(), savePrefix,
+	    IsIronman ? "ironman_" : "",
 	    gbIsSpawn
 	        ? (gbIsMultiplayer ? "share_" : "spawn_")
 	        : (gbIsMultiplayer ? "multi_" : "single_"),
