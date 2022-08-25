@@ -14,6 +14,7 @@
 #include "cursor.h"
 #include "error.h"
 #include "init.h"
+#include "interfac.h"
 #include "ironman.h"
 #include "utils/language.h"
 #include "utils/utf8.hpp"
@@ -171,15 +172,15 @@ void InitL2Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 266 && (!Quests[Q_SCHAMB].IsAvailable() || i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
+			if (dPiece[i][j] == 266 && (!Quests[Q_SCHAMB].IsAvailable() || i != Quests[Q_SCHAMB].position.x || j != Quests[Q_SCHAMB].position.y)) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (!IsIronman && dPiece[i][j] == 558) {
+			if (dPiece[i][j] == 558) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -199,7 +200,7 @@ void InitL3Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 170) {
+			if (dPiece[i][j] == 170) {
 				trigs[numtrigs].position = { i, j };
 				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
 				numtrigs++;
@@ -226,15 +227,15 @@ void InitL4Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 82) {
+			if (dPiece[i][j] == 82) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
-			if (IsIronman && dPiece[i][j] == 421) {
+			if (dPiece[i][j] == 421) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				trigs[numtrigs]._tlvl = 0;
 				numtrigs++;
 			}
@@ -934,6 +935,8 @@ void CheckTriggers()
 				return;
 			TWarpFrom = currlevel;
 			StartNewLvl(myPlayer, trigs[i]._tmsg, 0);
+			break;
+		case WM_DIABNOTRIGGER:
 			break;
 		default:
 			app_fatal("Unknown trigger msg");

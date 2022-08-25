@@ -26,6 +26,10 @@ enum interface_mode : uint16_t {
 	WM_DIABNEWGAME,
 	WM_DIABLOADGAME,
 
+	// trigger that does nothing. Helpful to remove a trigger without altering
+	// the monster generation algorithm.
+	WM_DIABNOTRIGGER = 0x40C,
+
 	WM_FIRST = WM_DIABNEXTLVL,
 	WM_LAST = WM_DIABLOADGAME,
 };

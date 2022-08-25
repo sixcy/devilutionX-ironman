@@ -21,6 +21,7 @@
 #include "engine/render/clx_render.hpp"
 #include "hwcursor.hpp"
 #include "init.h"
+#include "interfac.h"
 #include "loadsave.h"
 #include "pfile.h"
 #include "plrmsg.h"
@@ -476,6 +477,8 @@ void ShowProgress(interface_mode uMsg)
 		IncProgress();
 		LoadGameLevel(false, ENTRY_MAIN);
 		IncProgress();
+		break;
+	case WM_DIABNOTRIGGER:
 		break;
 	}
 
