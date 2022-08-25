@@ -10,6 +10,7 @@
 #include "codec.h"
 #include "engine.h"
 #include "init.h"
+#include "ironman.h"
 #include "loadsave.h"
 #include "menu.h"
 #include "mpq/mpq_reader.hpp"
@@ -44,6 +45,9 @@ std::string GetSavePath(uint32_t saveNum)
 	const char *ext = ".sv";
 	if (gbIsHellfire)
 		ext = ".hsv";
+
+	if (IsIronman)
+		path.append("ironman_");
 
 	if (gbIsSpawn) {
 		if (!gbIsMultiplayer) {
