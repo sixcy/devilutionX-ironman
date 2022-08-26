@@ -47,8 +47,9 @@ TMenuItem sgSingleMenu[] = {
 TMenuItem sgSingleMenuIM[] = {
 	// clang-format off
 	// dwFlags,      pszStr,         fnMenu
-	{ GMENU_ENABLED, "Save and Quit", &gamemenu_save_quit_game  },
-	{ GMENU_ENABLED, "Options",       &GamemenuOptions         },
+	{ GMENU_ENABLED, N_("Save and Exit"), &gamemenu_save_exit_game },
+	{ GMENU_ENABLED, N_("Options"),       &GamemenuOptions         },
+	{ GMENU_ENABLED, N_("Save and Quit"), &gamemenu_save_quit_game },
 	{ GMENU_ENABLED, NULL,            NULL }
 	// clang-format on
 };
@@ -99,6 +100,7 @@ void GamemenuUpdateSingleIM()
 	bool enable = Players[MyPlayerId]._pmode != PM_DEATH && !MyPlayerIsDead;
 
 	gmenu_enable(&sgSingleMenuIM[0], enable);
+	gmenu_enable(&sgSingleMenuIM[2], enable);
 }
 
 void GamemenuUpdateMulti()
@@ -368,6 +370,12 @@ void gamemenu_save_game(bool /*bActivate*/)
 	}
 	interface_msg_pump();
 	SetWindowProc(saveProc);
+}
+
+void gamemenu_save_exit_game(bool bActivate)
+{
+	gamemenu_save_game(bActivate);
+	GamemenuNewGame(bActivate);
 }
 
 void gamemenu_save_quit_game(bool bActivate)
