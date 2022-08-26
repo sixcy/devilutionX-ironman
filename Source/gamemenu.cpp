@@ -97,10 +97,7 @@ void GamemenuUpdateSingle()
 
 void GamemenuUpdateSingleIM()
 {
-	bool enable = Players[MyPlayerId]._pmode != PM_DEATH && !MyPlayerIsDead;
-
-	gmenu_enable(&sgSingleMenuIM[0], enable);
-	gmenu_enable(&sgSingleMenuIM[2], enable);
+	// do nothing
 }
 
 void GamemenuUpdateMulti()
@@ -349,7 +346,7 @@ void gamemenu_save_game(bool /*bActivate*/)
 		return;
 	}
 
-	if (Players[MyPlayerId]._pmode == PM_DEATH || MyPlayerIsDead) {
+	if (!IsIronman && (Players[MyPlayerId]._pmode == PM_DEATH || MyPlayerIsDead)) {
 		gamemenu_off();
 		return;
 	}
