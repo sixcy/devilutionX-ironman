@@ -27,6 +27,7 @@
 #include "menu.h"
 #include "missiles.h"
 #include "mpq/mpq_writer.hpp"
+#include "objects.h"
 #include "pfile.h"
 #include "qol/stash.h"
 #include "stores.h"
@@ -772,6 +773,11 @@ void LoadObject(LoadHelper &file, Object &object)
 	object._oVar6 = file.NextLE<uint32_t>();
 	object.bookMessage = static_cast<_speech_id>(file.NextLE<int32_t>());
 	object._oVar8 = file.NextLE<int32_t>();
+
+	if (object.IsBarrel() && !object.IsBroken())
+		RemainingBarrelCount++;
+	if ((object.IsSarcophagus() || object.IsChest()) && !object.IsOpen())
+		RemainingChestCount++;
 }
 
 void LoadItem(LoadHelper &file, Item &item)
@@ -1945,6 +1951,8 @@ void LoadGame(bool firstflag)
 	}
 
 	LoadGameLevel(firstflag, ENTRY_LOAD);
+	RemainingBarrelCount = 0;
+	RemainingChestCount = 0;
 	SyncInitPlr(MyPlayerId);
 	SyncPlrAnim(MyPlayerId);
 
@@ -2416,6 +2424,8 @@ void LoadLevel()
 	ActiveMonsterCount = file.NextBE<int32_t>();
 	auto savedItemCount = file.NextBE<uint32_t>();
 	ActiveObjectCount = file.NextBE<int32_t>();
+	RemainingBarrelCount = 0;
+	RemainingChestCount = 0;
 
 	if (leveltype != DTYPE_TOWN) {
 		for (int &monsterId : ActiveMonsters)

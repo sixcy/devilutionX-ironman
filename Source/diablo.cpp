@@ -2229,6 +2229,9 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 				IncProgress();
 			}
 		} else {
+			RemainingBarrelCount = 0;
+			RemainingChestCount = 0;
+
 			for (int i = 0; i < MAXDUNX; i++) { // NOLINT(modernize-loop-convert)
 				for (int j = 0; j < MAXDUNY; j++) {
 					dFlags[i][j] |= DungeonFlag::Lit;
