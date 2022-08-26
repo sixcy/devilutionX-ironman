@@ -187,6 +187,17 @@ struct Object {
 		return IsAnyOf(_otype, _object_id::OBJ_CHEST1, _object_id::OBJ_CHEST2, _object_id::OBJ_CHEST3, _object_id::OBJ_TCHEST1, _object_id::OBJ_TCHEST2, _object_id::OBJ_TCHEST3);
 	}
 
+	[[nodiscard]] constexpr bool IsSarcophagus() const
+	{
+		return _otype == _object_id::OBJ_SARC;
+	}
+
+	[[nodiscard]] constexpr bool IsOpen() const
+	{
+		assert(IsChest() || IsSarcophagus());
+		return _oSelFlag == 0U;
+	}
+
 	/**
 	 * @brief Check if this object is a trapped chest (specifically a chest which is currently trapped).
 	 * @return True if the object is one of the trapped chest types (see _object_id) and has an active trap.
@@ -246,6 +257,8 @@ extern DVL_API_FOR_TEST Object Objects[MAXOBJECTS];
 extern int AvailableObjects[MAXOBJECTS];
 extern int ActiveObjects[MAXOBJECTS];
 extern int ActiveObjectCount;
+extern int RemainingBarrelCount;
+extern int RemainingChestCount; // and sarcophagus
 extern bool ApplyObjectLighting;
 extern bool LoadingMapObjects;
 

@@ -10,6 +10,9 @@
 #include "control.h"
 #include "engine/load_file.hpp"
 #include "engine/render/automap_render.hpp"
+#include "ironman.h"
+#include "monster.h"
+#include "objects.h"
 #include "palette.h"
 #include "player.h"
 #include "setmaps.h"
@@ -496,39 +499,58 @@ void DrawAutomapText(const Surface &out)
 		linePosition.y += 15;
 	}
 
-	if (setlevel) {
+	if (setlevel)
 		DrawString(out, _(QuestLevelNames[setlvlnum]), linePosition);
-		return;
-	}
+	else {
+		if (currlevel != 0) {
+			std::string description;
+			if (currlevel >= 17 && currlevel <= 20) {
+				description = fmt::format(_("Level: Nest {:d}"), currlevel - 16);
+			} else if (currlevel >= 21 && currlevel <= 24) {
+				description = fmt::format(_("Level: Crypt {:d}"), currlevel - 20);
+			} else {
+				description = fmt::format(_("Level: {:d}"), currlevel);
+			}
 
-	if (currlevel != 0) {
-		std::string description;
-		if (currlevel >= 17 && currlevel <= 20) {
-			description = fmt::format(_("Level: Nest {:d}"), currlevel - 16);
-		} else if (currlevel >= 21 && currlevel <= 24) {
-			description = fmt::format(_("Level: Crypt {:d}"), currlevel - 20);
-		} else {
-			description = fmt::format(_("Level: {:d}"), currlevel);
+			DrawString(out, description, linePosition);
+			linePosition.y += 15;
+		}
+		string_view difficulty;
+		switch (sgGameInitInfo.nDifficulty) {
+		case DIFF_NORMAL:
+			difficulty = _("Normal");
+			break;
+		case DIFF_NIGHTMARE:
+			difficulty = _("Nightmare");
+			break;
+		case DIFF_HELL:
+			difficulty = _("Hell");
+			break;
 		}
 
+		std::string description = fmt::format(_(/* TRANSLATORS: {:s} means: Game Difficulty. */ "Difficulty: {:s}"), difficulty);
 		DrawString(out, description, linePosition);
-		linePosition.y += 15;
-	}
-	string_view difficulty;
-	switch (sgGameInitInfo.nDifficulty) {
-	case DIFF_NORMAL:
-		difficulty = _("Normal");
-		break;
-	case DIFF_NIGHTMARE:
-		difficulty = _("Nightmare");
-		break;
-	case DIFF_HELL:
-		difficulty = _("Hell");
-		break;
 	}
 
-	std::string description = fmt::format(_(/* TRANSLATORS: {:s} means: Game Difficulty. */ "Difficulty: {:s}"), difficulty);
-	DrawString(out, description, linePosition);
+	if (!IsIronman)
+		return;
+
+	linePosition.y -= setlevel ? 0 : 15;
+	linePosition.x += GetScreenWidth() - 180;
+
+	// Do not count the golems
+	std::string monsterCountDesc = fmt::format(_("Monsters Left: {:d}"), ActiveMonsterCount - MAX_PLRS);
+	DrawString(out, monsterCountDesc, linePosition);
+	linePosition.y += 15;
+
+	linePosition.x += 14;
+	std::string barrelCountDesc = fmt::format(_("Barrels Left: {:d}"), RemainingBarrelCount);
+	DrawString(out, barrelCountDesc, linePosition);
+	linePosition.y += 15;
+
+	linePosition.x += 4;
+	std::string chestCountDesc = fmt::format(_("Chests left: {:d}"), RemainingChestCount);
+	DrawString(out, chestCountDesc, linePosition);
 }
 
 std::unique_ptr<AutomapTile[]> LoadAutomapData(size_t &tileCount)

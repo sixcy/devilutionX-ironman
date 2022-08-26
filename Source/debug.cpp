@@ -4,6 +4,7 @@
  * Implementation of debug functions.
  */
 
+#include "missiles.h"
 #ifdef _DEBUG
 
 #include <sstream>
@@ -843,6 +844,55 @@ std::string DebugCmdToggleFPS(const string_view parameter)
 	return "";
 }
 
+std::string DebugCmdOpenAllChests(const string_view /*parameter*/)
+{
+	int countOpened = 0;
+	for (int i = 0; i < MAXOBJECTS; i++) {
+		Object &o = Objects[i];
+		if ((o.IsChest() || o.IsSarcophagus()) && !o.IsOpen()) {
+			OperateObject(MyPlayerId, i, true);
+			countOpened++;
+		}
+	}
+	return fmt::format("{:d} opened", countOpened);
+}
+
+std::string DebugCmdBreakAllBarrels(const string_view /*parameter*/)
+{
+	int countBroken = 0;
+	for (auto &o : Objects) {
+		if (o.IsBarrel() && !o.IsBroken()) {
+			BreakObject(MyPlayerId, o);
+			countBroken++;
+		}
+	}
+	return fmt::format("{:d} broken", countBroken);
+}
+
+std::string DebugCmdKillAll(const string_view parameter)
+{
+	int countKilled = 0;
+	for (int i = 0; i < ActiveMonsterCount; i++) {
+		int mi = ActiveMonsters[i];
+		auto &monster = Monsters[mi];
+		if ((monster._mhitpoints >> 6) <= 0)
+			continue;
+		if (monster.position.tile == GolemHoldingCell)
+			continue;
+		M_StartKill(mi, MyPlayerId);
+		countKilled++;
+	}
+	return fmt::format("{:d} killed", countKilled);
+}
+
+std::string DebugCmdClearLevel(const string_view parameter)
+{
+	auto chests = DebugCmdOpenAllChests(parameter);
+	auto barrels = DebugCmdBreakAllBarrels(parameter);
+	auto monsters = DebugCmdKillAll(parameter);
+	return chests + ", " + barrels + ", " + monsters;
+}
+
 std::vector<DebugCmdItem> DebugCmdList = {
 	{ "help", "Prints help overview or help for a specific command.", "({command})", &DebugCmdHelp },
 	{ "give gold", "Fills the inventory with gold.", "", &DebugCmdGiveGoldCheat },
@@ -877,6 +927,10 @@ std::vector<DebugCmdItem> DebugCmdList = {
 	{ "questinfo", "Shows info of quests.", "{id}", &DebugCmdQuestInfo },
 	{ "playerinfo", "Shows info of player.", "{playerid}", &DebugCmdPlayerInfo },
 	{ "fps", "Toggles displaying FPS", "", &DebugCmdToggleFPS },
+	{ "openall", "Open all chests and Sarcophagus", "", &DebugCmdOpenAllChests },
+	{ "breakall", "Break all barrels", "", &DebugCmdBreakAllBarrels },
+	{ "killall", "Kill all monsters", "", &DebugCmdKillAll },
+	{ "clearall", "openall + breakall + killall", "", &DebugCmdClearLevel }
 };
 
 } // namespace
