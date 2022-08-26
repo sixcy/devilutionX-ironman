@@ -50,6 +50,8 @@ Object Objects[MAXOBJECTS];
 int AvailableObjects[MAXOBJECTS];
 int ActiveObjects[MAXOBJECTS];
 int ActiveObjectCount;
+int RemainingBarrelCount;
+int RemainingChestCount;
 bool LoadingMapObjects;
 
 namespace {
@@ -420,6 +422,8 @@ void ClrAllObjects()
 		object = {};
 	}
 	ActiveObjectCount = 0;
+	RemainingBarrelCount = 0;
+	RemainingChestCount = 0;
 	for (int i = 0; i < MAXOBJECTS; i++) {
 		AvailableObjects[i] = i;
 	}
@@ -1047,6 +1051,7 @@ void AddChest(Object &chest)
 		break;
 	}
 	chest._oVar2 = GenerateRnd(8);
+	RemainingChestCount++;
 }
 
 void ObjSetMicro(Point position, int pn)
@@ -1309,6 +1314,7 @@ void AddSarcophagus(Object &sarcophagus)
 			sarcophagus._oVar2 = -1;
 		}
 	}
+	RemainingChestCount++;
 }
 
 void AddFlameTrap(Object &flameTrap)
@@ -1393,6 +1399,14 @@ void AddBarrel(Object &barrel)
 			barrel._oVar4 = -1;
 		}
 	}
+
+	// How item loading works:
+	//   1) The item is generated with default parameters
+	//   2) For a barrel, this function is called
+	//   3) The actual loading happens with LoadObject
+	// Bottom line: here, we do not know yet whether a barrel was broken or not
+	// But still, we need to increment this counter in the case of New Game
+	RemainingBarrelCount++;
 }
 
 void AddShrine(Object &shrine)
@@ -2167,6 +2181,7 @@ void OperateChest(const Player &player, Object &chest, bool sendLootMsg)
 	}
 	if (&player == MyPlayer)
 		NetSendCmdLoc(MyPlayerId, false, CMD_OPERATEOBJ, chest.position);
+	RemainingChestCount--;
 }
 
 void OperateMushroomPatch(const Player &player, Object &mushroomPatch)
@@ -2301,6 +2316,7 @@ void OperateSarcophagus(Object &sarcophagus, bool sendMsg, bool sendLootMsg)
 		ActivateSkeleton(Monsters[sarcophagus._oVar2], sarcophagus.position);
 	if (sendMsg)
 		NetSendCmdLoc(MyPlayerId, false, CMD_OPERATEOBJ, sarcophagus.position);
+	RemainingChestCount--;
 }
 
 void OperatePedestal(Player &player, Object &pedestal, bool sendmsg)
@@ -2592,6 +2608,7 @@ void OperateShrineThaumaturgic(const Player &player)
 			object._oRndSeed = AdvanceRndSeed();
 			object._oSelFlag = 1;
 			object._oAnimFrame -= 2;
+			RemainingChestCount++;
 		}
 	}
 
@@ -3622,6 +3639,7 @@ void BreakBarrel(const Player &player, Object &barrel, bool forcebreak, bool sen
 	if (&player == MyPlayer) {
 		NetSendCmdLoc(MyPlayerId, false, CMD_BREAKOBJ, barrel.position);
 	}
+	RemainingBarrelCount--;
 }
 
 void SyncCrux(const Object &crux)

@@ -22,6 +22,7 @@ set(libdevilutionx_SRCS
   init.cpp
   interfac.cpp
   inv.cpp
+  ironman.cpp
   itemdat.cpp
   items.cpp
   lighting.cpp

@@ -22,6 +22,7 @@
 #include "inv.h"
 #include "levels/setmaps.h"
 #include "lighting.h"
+#include "missiles.h"
 #include "monstdat.h"
 #include "monster.h"
 #include "pack.h"
@@ -1057,6 +1058,56 @@ std::string DebugCmdClearSearch(const string_view parameter)
 	return "Now you have to find it yourself.";
 }
 
+std::string DebugCmdOpenAllChests(const string_view /*parameter*/)
+{
+	int countOpened = 0;
+	for (auto &obj : Objects) {
+		if ((obj.IsChest() || obj.IsSarcophagus()) && !obj.IsOpen()) {
+			OperateObject(*MyPlayer, obj);
+			countOpened++;
+		}
+	}
+	return fmt::format("{:d} opened", countOpened);
+}
+
+std::string DebugCmdBreakAllBarrels(const string_view /*parameter*/)
+{
+	int countBroken = 0;
+	const Player &myPlayer = *MyPlayer;
+	for (auto &obj : Objects) {
+		if (obj.IsBarrel() && !obj.IsBroken()) {
+			BreakObject(myPlayer, obj);
+			countBroken++;
+		}
+	}
+	return fmt::format("{:d} broken", countBroken);
+}
+
+std::string DebugCmdKillAll(const string_view parameter)
+{
+	const Player &myPlayer = *MyPlayer;
+	int countKilled = 0;
+	for (size_t i = 0; i < ActiveMonsterCount; i++) {
+		int mIndex = ActiveMonsters[i];
+		auto &monster = Monsters[mIndex];
+		if ((monster.hitPoints >> 6) <= 0)
+			continue;
+		if (monster.position.tile == GolemHoldingCell)
+			continue;
+		M_StartKill(monster, myPlayer);
+		countKilled++;
+	}
+	return fmt::format("{:d} killed", countKilled);
+}
+
+std::string DebugCmdClearLevel(const string_view parameter)
+{
+	auto chests = DebugCmdOpenAllChests(parameter);
+	auto barrels = DebugCmdBreakAllBarrels(parameter);
+	auto monsters = DebugCmdKillAll(parameter);
+	return chests + ", " + barrels + ", " + monsters;
+}
+
 std::vector<DebugCmdItem> DebugCmdList = {
 	{ "help", "Prints help overview or help for a specific command.", "({command})", &DebugCmdHelp },
 	{ "givegold", "Fills the inventory with gold.", "", &DebugCmdGiveGoldCheat },
@@ -1100,6 +1151,10 @@ std::vector<DebugCmdItem> DebugCmdList = {
 	{ "searchitem", "Searches the automap for {item}", "{item}", &DebugCmdSearchItem },
 	{ "searchobject", "Searches the automap for {object}", "{object}", &DebugCmdSearchObject },
 	{ "clearsearch", "Search in the auto map is cleared", "", &DebugCmdClearSearch },
+	{ "openall", "Open all chests and Sarcophagus", "", &DebugCmdOpenAllChests },
+	{ "breakall", "Break all barrels", "", &DebugCmdBreakAllBarrels },
+	{ "killall", "Kill all monsters", "", &DebugCmdKillAll },
+	{ "clearall", "openall + breakall + killall", "", &DebugCmdClearLevel }
 };
 
 } // namespace

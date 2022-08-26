@@ -30,6 +30,7 @@
 #include "missiles.h"
 #include "monster.h"
 #include "mpq/mpq_common.hpp"
+#include "objects.h"
 #include "pfile.h"
 #include "playerdat.hpp"
 #include "qol/stash.h"
@@ -846,6 +847,11 @@ void LoadObject(LoadHelper &file, Object &object)
 	object._oVar6 = file.NextLE<uint32_t>();
 	object.bookMessage = static_cast<_speech_id>(file.NextLE<int32_t>());
 	object._oVar8 = file.NextLE<int32_t>();
+
+	if (object.IsBarrel() && !object.IsBroken())
+		RemainingBarrelCount++;
+	if ((object.IsSarcophagus() || object.IsChest()) && !object.IsOpen())
+		RemainingChestCount++;
 }
 
 void LoadItem(LoadHelper &file, Item &item)
@@ -2355,6 +2361,8 @@ void LoadGame(bool firstflag)
 	}
 
 	LoadGameLevel(firstflag, ENTRY_LOAD);
+	RemainingBarrelCount = 0;
+	RemainingChestCount = 0;
 	SetPlrAnims(myPlayer);
 	SyncPlrAnim(myPlayer);
 

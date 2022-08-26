@@ -338,8 +338,12 @@ void CheckRportal()
 		if (missile._mitype == MissileID::RedPortal) {
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
-				InfoString = _("Portal to");
-				AddPanelString(!setlevel ? _("The Unholy Altar") : _("level 15"));
+				if (IsIronman && !LevelIsClear())
+					InfoString = SelectImMsg();
+				else {
+					InfoString = _("Portal to");
+					AddPanelString(!setlevel ? _("The Unholy Altar") : _("level 15"));
+				}
 				cursPosition = missile.position.tile;
 			}
 		}

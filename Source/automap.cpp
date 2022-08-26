@@ -13,8 +13,11 @@
 #include "engine/load_file.hpp"
 #include "engine/palette.h"
 #include "engine/render/automap_render.hpp"
+#include "ironman.h"
 #include "levels/gendung.h"
 #include "levels/setmaps.h"
+#include "monster.h"
+#include "objects.h"
 #include "player.h"
 #include "utils/language.h"
 #include "utils/stdcompat/algorithm.hpp"
@@ -753,42 +756,61 @@ void DrawAutomapText(const Surface &out)
 
 	if (setlevel) {
 		DrawString(out, _(QuestLevelNames[setlvlnum]), linePosition);
+	} else {
+		std::string description;
+		switch (leveltype) {
+		case DTYPE_NEST:
+			description = fmt::format(fmt::runtime(_("Level: Nest {:d}")), currlevel - 16);
+			break;
+		case DTYPE_CRYPT:
+			description = fmt::format(fmt::runtime(_("Level: Crypt {:d}")), currlevel - 20);
+			break;
+		case DTYPE_TOWN:
+			description = std::string(_("Town"));
+			break;
+		default:
+			description = fmt::format(fmt::runtime(_("Level: {:d}")), currlevel);
+			break;
+		}
+
+		DrawString(out, description, linePosition);
+		linePosition.y += 15;
+		string_view difficulty;
+		switch (sgGameInitInfo.nDifficulty) {
+		case DIFF_NORMAL:
+			difficulty = _("Normal");
+			break;
+		case DIFF_NIGHTMARE:
+			difficulty = _("Nightmare");
+			break;
+		case DIFF_HELL:
+			difficulty = _("Hell");
+			break;
+		}
+
+		std::string difficultyString = fmt::format(fmt::runtime(_(/* TRANSLATORS: {:s} means: Game Difficulty. */ "Difficulty: {:s}")), difficulty);
+		DrawString(out, difficultyString, linePosition);
+	}
+
+	if (!IsIronman)
 		return;
-	}
 
-	std::string description;
-	switch (leveltype) {
-	case DTYPE_NEST:
-		description = fmt::format(fmt::runtime(_("Level: Nest {:d}")), currlevel - 16);
-		break;
-	case DTYPE_CRYPT:
-		description = fmt::format(fmt::runtime(_("Level: Crypt {:d}")), currlevel - 20);
-		break;
-	case DTYPE_TOWN:
-		description = std::string(_("Town"));
-		break;
-	default:
-		description = fmt::format(fmt::runtime(_("Level: {:d}")), currlevel);
-		break;
-	}
+	linePosition.y -= setlevel ? 0 : 15;
+	linePosition.x += GetScreenWidth() - 180;
 
-	DrawString(out, description, linePosition);
+	// Do not count the golems
+	std::string monsterCountDesc = fmt::format(fmt::runtime(_("Monsters Left: {:d}")), ActiveMonsterCount);
+	DrawString(out, monsterCountDesc, linePosition);
 	linePosition.y += 15;
-	string_view difficulty;
-	switch (sgGameInitInfo.nDifficulty) {
-	case DIFF_NORMAL:
-		difficulty = _("Normal");
-		break;
-	case DIFF_NIGHTMARE:
-		difficulty = _("Nightmare");
-		break;
-	case DIFF_HELL:
-		difficulty = _("Hell");
-		break;
-	}
 
-	std::string difficultyString = fmt::format(fmt::runtime(_(/* TRANSLATORS: {:s} means: Game Difficulty. */ "Difficulty: {:s}")), difficulty);
-	DrawString(out, difficultyString, linePosition);
+	linePosition.x += 14;
+	std::string barrelCountDesc = fmt::format(fmt::runtime(_("Barrels Left: {:d}")), RemainingBarrelCount);
+	DrawString(out, barrelCountDesc, linePosition);
+	linePosition.y += 15;
+
+	linePosition.x += 4;
+	std::string chestCountDesc = fmt::format(fmt::runtime(_("Chests Left: {:d}")), RemainingChestCount);
+	DrawString(out, chestCountDesc, linePosition);
 }
 
 std::unique_ptr<AutomapTile[]> LoadAutomapData(size_t &tileCount)
