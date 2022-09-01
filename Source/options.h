@@ -5,6 +5,7 @@
 
 #include <SDL_version.h>
 
+#include "ironman.h"
 #include "pack.h"
 #include "utils/enum_traits.h"
 #include "utils/stdcompat/string_view.hpp"
@@ -590,7 +591,21 @@ private:
 	std::unordered_map<std::string, int> keyNameToKeyID;
 };
 
+enum class IMCountersDisplayMode : int {
+	All,
+	Limited, // only displays when <= 5
+	None,    // no display at all
+};
+
+struct IronmanOptions : OptionCategoryBase {
+	IronmanOptions();
+	std::vector<OptionEntryBase *> GetEntries() override;
+
+	OptionEntryEnum<IMCountersDisplayMode> countersDisplayMode;
+};
+
 struct Options {
+	IronmanOptions Ironman;
 	StartUpOptions StartUp;
 	DiabloOptions Diablo;
 	HellfireOptions Hellfire;
@@ -606,6 +621,7 @@ struct Options {
 	[[nodiscard]] std::vector<OptionCategoryBase *> GetCategories()
 	{
 		return {
+			&Ironman,
 			&Language,
 			&StartUp,
 			&Graphics,
