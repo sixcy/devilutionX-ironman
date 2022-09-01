@@ -1,4 +1,3 @@
-
 [![Discord Channel](https://img.shields.io/discord/518540764754608128?color=%237289DA&logo=discord&logoColor=%23FFFFFF)](https://discord.gg/YQKCAYQ)
 [![Downloads](https://img.shields.io/github/downloads/diasurgical/devilutionX/total.svg)](https://github.com/sixcy/devilutionX-ironman/releases)
 [![Codecov](https://codecov.io/gh/diasurgical/devilutionX/branch/master/graph/badge.svg)](https://codecov.io/gh/sixcy/devilutionX-ironman)
@@ -10,6 +9,9 @@
 
 This Ironman mod is built on DevilutionX version 1.4.1.
 DevilutionX is a modern port of Diablo 1. Read below the section "DevilutionX" to learn more.
+
+![showcase1](https://user-images.githubusercontent.com/6163502/188024803-d87fc22f-edc0-4fe5-b53d-671c878e456f.png)
+![showcase2](https://user-images.githubusercontent.com/6163502/188024806-f8efe47c-823f-453a-acbd-d483d67cd7a4.png)
 
 Ironman is a classic Diablo 1 challenge, reputed to be one of the hardest user-made challenges.
 Many variations of it have emerged; tournaments were held and are still being held to this day, players competing on who would go the furthest.
