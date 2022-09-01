@@ -116,6 +116,7 @@ bool HeadlessMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
 char gszProductName[64] = "DevilutionX vUnknown";
+char IronmanModVersion[64] = "Ironman mod vUnknown";
 
 #ifdef _DEBUG
 bool DebugDisableNetworkTimeout = false;
@@ -1133,6 +1134,7 @@ void DiabloInitScreen()
 
 void SetApplicationVersions()
 {
+	*BufCopy(IronmanModVersion, IRONMAN_NAME, " v", IRONMAN_VERSION) = '\0';
 	*BufCopy(gszProductName, PROJECT_NAME, " v", PROJECT_VERSION) = '\0';
 	*BufCopy(gszVersionNumber, "version ", PROJECT_VERSION) = '\0';
 }

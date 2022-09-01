@@ -3,6 +3,7 @@
 #include "DiabloUI/diabloui.h"
 #include "DiabloUI/selok.h"
 #include "control.h"
+#include "diablo.h"
 #include "engine/load_clx.hpp"
 #include "utils/language.h"
 
@@ -66,6 +67,9 @@ void MainmenuLoad(const char *name)
 
 	SDL_Rect rect2 = { 17, (Sint16)(gnScreenHeight - 36), 605, 21 };
 	vecMainMenuDialog.push_back(std::make_unique<UiArtText>(name, rect2, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
+
+	SDL_Rect rect3 = { 17, (Sint16)(gnScreenHeight - 21), 605, 21 };
+	vecMainMenuDialog.push_back(std::make_unique<UiArtText>(IronmanModVersion, rect3, UiFlags::FontSize12 | UiFlags::ColorUiSilverDark));
 
 #ifndef NOEXIT
 	UiInitList(nullptr, UiMainMenuSelect, MainmenuEsc, vecMainMenuDialog, true);
