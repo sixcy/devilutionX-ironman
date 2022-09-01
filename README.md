@@ -1,6 +1,46 @@
-<p align="center">
-<img width="554" src="https://user-images.githubusercontent.com/204594/113575181-c946a400-961d-11eb-8347-a8829fa3830c.png">
-</p>
+
+[![Discord Channel](https://img.shields.io/discord/518540764754608128?color=%237289DA&logo=discord&logoColor=%23FFFFFF)](https://discord.gg/YQKCAYQ)
+[![Downloads](https://img.shields.io/github/downloads/diasurgical/devilutionX/total.svg)](https://github.com/sixcy/devilutionX-ironman/releases)
+[![Codecov](https://codecov.io/gh/diasurgical/devilutionX/branch/master/graph/badge.svg)](https://codecov.io/gh/sixcy/devilutionX-ironman)
+[![BCH compliance](https://bettercodehub.com/edge/badge/sixcy/devilutionX-ironman?branch=ironman)](https://bettercodehub.com/)
+
+# Diablo 1 (DevilutionX) Ironman mod
+
+[Download the mod here](https://github.com/sixcy/devilutionX-ironman/releases)
+
+This Ironman mod is built on DevilutionX version 1.4.1.
+DevilutionX is a modern port of Diablo 1. Read below the section "DevilutionX" to learn more.
+
+Ironman is a classic Diablo 1 challenge, reputed to be one of the hardest user-made challenges.
+Many variations of it have emerged; tournaments were held and are still being held to this day, players competing on who would go the furthest.
+
+One of the most common variations involved diving in the dungeon with a team of 3 people, with the following rules:
+1) No backtracking is allowed: once you enter a new level, you can never go back to the surface or go back to previously cleared levels.
+2) The level must be cleared before hopping to the next: all monsters must be killed, all barrels must be broken, and all chests/sarcophagus must be opened
+3) Death is permanent. Once you die, the game ends for you unless a teammate has a Resurrect scroll to spend on you.
+4) In dlvl16, Diablo must be killed last
+5) You can only buy gear between difficulties: upon starting a New Game, between Normal and Nightmare, and finally between Nightmare and Hell
+
+Some people even attempted the challenge solo: they would make a solo MP game and try to survive until the end.
+The game has known triple-crown (on all three difficulties) victories several times, although such a challenge is insanely hard!
+
+This mod aims to revisit the Ironman challenge for Single Player. In particular:
+- Saving is allowed to pause and resume the game at anytime (Save has been replaced by "Save and Exit"); instead of having to play through all four dungeon levels in one game session
+- Quests have been modified to have their rewards available without having to visit townsfolks
+- The various ironman rules are enforced through dynamic checks. For instance, you cannot descend to the next level until you have cleared the current one.
+- (not from the mod in itself) Since it is Single Player, the challenge is easier: monsters have two times less HP than in Multi-Player
+
+The intended way to play this mod is to make a new character, create a new Normal game, and kill Diablo.
+Once Diablo is killed, you may move to Nightmare. Then to Hell. Although killing Diablo on Normal difficulty should be hard enough!
+
+If your character dies, you will not be able to resume progress: the run will be lost.
+The save file is not deleted, so you may create a New Game just for fun if you wish to - although that would be beyond ironman's scope.
+
+I hope you will have a lot of fun trying out the Diablo 1 Ironman challenge.
+Feel free to create an Issue (Issues tab on GitHub) if you encounter any problems.
+Suggestions are welcome as well!
+
+Good luck.
 
 ---
 
