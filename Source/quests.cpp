@@ -521,9 +521,7 @@ bool ForceQuests()
 			int ql = quest._qslvl - 1;
 
 			if (EntranceBoundaryContains(quest.position, cursPosition)) {
-				InfoString = IsIronman && !LevelIsClear() ?
-					SelectImMsg() :
-					fmt::format(_(/* TRANSLATORS: Used for Quest Portals. {:s} is a Map Name */ "To {:s}"), _(QuestTriggerNames[ql]));
+				InfoString = IsIronman && !LevelIsClear() ? SelectImMsg() : fmt::format(_(/* TRANSLATORS: Used for Quest Portals. {:s} is a Map Name */ "To {:s}"), _(QuestTriggerNames[ql]));
 				cursPosition = quest.position;
 				return true;
 			}
