@@ -107,6 +107,7 @@ bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
 char gszProductName[64] = "DevilutionX vUnknown";
+char IronmanModVersion[64] = "Ironman mod vUnknown";
 
 #ifdef _DEBUG
 bool DebugDisableNetworkTimeout = false;
@@ -987,6 +988,7 @@ void DiabloInitScreen()
 
 void SetApplicationVersions()
 {
+	snprintf(IronmanModVersion, sizeof(IronmanModVersion) / sizeof(char), "%s v%s", IRONMAN_NAME, IRONMAN_VERSION);
 	snprintf(gszProductName, sizeof(gszProductName) / sizeof(char), "%s v%s", PROJECT_NAME, PROJECT_VERSION);
 	CopyUtf8(gszVersionNumber, fmt::format(_("version {:s}"), PROJECT_VERSION), sizeof(gszVersionNumber) / sizeof(char));
 }
