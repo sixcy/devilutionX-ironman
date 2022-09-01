@@ -3,7 +3,7 @@ name: PS4
 on:
   push:
     branches:
-      - master
+      - ironman
   pull_request:
     types: [ opened, synchronize ]
 

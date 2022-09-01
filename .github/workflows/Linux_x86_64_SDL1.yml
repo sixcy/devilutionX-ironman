@@ -3,7 +3,7 @@ name: Linux_x86_64_SDL1
 on:
   push:
     branches:
-      - master
+      - ironman
   pull_request:
     types: [ opened, synchronize ]
 
