@@ -1246,4 +1246,22 @@ uint32_t KeymapperOptions::KeyForAction(string_view actionName) const
 	return DVL_VK_INVALID;
 }
 
+IronmanOptions::IronmanOptions()
+    : OptionCategoryBase("Ironman", N_("Ironman"), N_("Ironman Settings"))
+    , countersDisplayMode("Counters", OptionEntryFlags::None, N_("Display Counters"), N_("Display barrel/chest/monster counters when opening automap?"), IMCountersDisplayMode::All,
+          {
+              { IMCountersDisplayMode::None, N_("Never") },
+              { IMCountersDisplayMode::Limited, N_("When less than 5 remains") },
+              { IMCountersDisplayMode::All, N_("Always") },
+          })
+{
+}
+
+std::vector<OptionEntryBase *> IronmanOptions::GetEntries()
+{
+	return {
+		&countersDisplayMode,
+	};
+}
+
 } // namespace devilution
