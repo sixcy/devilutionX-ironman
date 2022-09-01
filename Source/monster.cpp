@@ -20,12 +20,15 @@
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
 #include "engine/render/cl2_render.hpp"
+#include "error.h"
 #include "init.h"
+#include "ironman.h"
 #include "lighting.h"
 #include "minitext.h"
 #include "missiles.h"
 #include "movie.h"
 #include "options.h"
+#include "player.h"
 #include "spelldat.h"
 #include "storm/storm_net.hpp"
 #include "themes.h"
@@ -4058,6 +4061,13 @@ void M_StartKill(int i, int pnum)
 {
 	assert(i >= 0 && i < MAXMONSTERS);
 	auto &monster = Monsters[i];
+
+	// Ironman: if Diablo was killed before all other monsters, kill the player
+	if (IsIronman && ActiveMonsterCount > MAX_PLRS + 1 && monster.MType->mtype == MT_DIABLO) {
+		StartPlayerKill(MyPlayerId, 0);
+		InitDiabloMsg("Game over! Diablo must be killed last");
+		return;
+	}
 
 	if (MyPlayerId == pnum) {
 		delta_kill_monster(i, monster.position.tile, currlevel);
