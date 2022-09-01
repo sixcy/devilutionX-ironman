@@ -12,6 +12,7 @@
 #include "controls/controller_buttons.h"
 #include "controls/game_controls.h"
 #include "engine/sound_defs.hpp"
+#include "ironman.h"
 #include "pack.h"
 #include "utils/enum_traits.h"
 #include "utils/stdcompat/optional.hpp"
@@ -799,8 +800,22 @@ private:
 	bool CanDeferToMovementHandler(const Action &action) const;
 };
 
+enum class IMCountersDisplayMode : int {
+	All,
+	Limited, // only displays when <= 5
+	None,    // no display at all
+};
+
+struct IronmanOptions : OptionCategoryBase {
+	IronmanOptions();
+	std::vector<OptionEntryBase *> GetEntries() override;
+
+	OptionEntryEnum<IMCountersDisplayMode> countersDisplayMode;
+};
+
 struct Options {
 	GameModeOptions GameMode;
+	IronmanOptions Ironman;
 	StartUpOptions StartUp;
 	DiabloOptions Diablo;
 	HellfireOptions Hellfire;
@@ -817,6 +832,7 @@ struct Options {
 	[[nodiscard]] std::vector<OptionCategoryBase *> GetCategories()
 	{
 		return {
+			&Ironman,
 			&Language,
 			&GameMode,
 			&StartUp,

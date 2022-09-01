@@ -18,6 +18,7 @@
 #include "levels/setmaps.h"
 #include "monster.h"
 #include "objects.h"
+#include "options.h"
 #include "player.h"
 #include "utils/language.h"
 #include "utils/stdcompat/algorithm.hpp"
@@ -792,24 +793,28 @@ void DrawAutomapText(const Surface &out)
 		DrawString(out, difficultyString, linePosition);
 	}
 
-	if (!IsIronman)
+	auto counterDisplayMode = *sgOptions.Ironman.countersDisplayMode;
+	if (!IsIronman || counterDisplayMode == IMCountersDisplayMode::None)
 		return;
+
+	bool lessThanFive = counterDisplayMode == IMCountersDisplayMode::Limited;
 
 	linePosition.y -= setlevel ? 0 : 15;
 	linePosition.x += GetScreenWidth() - 180;
 
 	// Do not count the golems
-	std::string monsterCountDesc = fmt::format(fmt::runtime(_("Monsters Left: {:d}")), ActiveMonsterCount);
+	int actualMonsterCount = (int)ActiveMonsterCount - MAX_PLRS;
+	std::string monsterCountDesc = (lessThanFive && actualMonsterCount > 5) ? std::string(_("Monsters Left: ??")) : fmt::format(fmt::runtime(_("Monsters Left: {:d}")), actualMonsterCount);
 	DrawString(out, monsterCountDesc, linePosition);
 	linePosition.y += 15;
 
 	linePosition.x += 14;
-	std::string barrelCountDesc = fmt::format(fmt::runtime(_("Barrels Left: {:d}")), RemainingBarrelCount);
+	std::string barrelCountDesc = (lessThanFive && RemainingBarrelCount > 5) ? std::string(_("Barrels Left: ??")) : fmt::format(fmt::runtime(_("Barrels Left: {:d}")), RemainingBarrelCount);
 	DrawString(out, barrelCountDesc, linePosition);
 	linePosition.y += 15;
 
 	linePosition.x += 4;
-	std::string chestCountDesc = fmt::format(fmt::runtime(_("Chests Left: {:d}")), RemainingChestCount);
+	std::string chestCountDesc = (lessThanFive && RemainingChestCount > 5) ? std::string(_("Chests left: ??")) : fmt::format(fmt::runtime(_("Chests Left: {:d}")), RemainingChestCount);
 	DrawString(out, chestCountDesc, linePosition);
 }
 
