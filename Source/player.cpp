@@ -12,6 +12,8 @@
 #include "controls/plrctrls.h"
 #include "cursor.h"
 #include "dead.h"
+#include "error.h"
+#include "ironman.h"
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -2944,6 +2946,9 @@ StartNewLvl(Player &player, interface_mode fom, int lvl)
 			NetSendCmdParam2(true, CMD_NEWLVL, fom, lvl);
 		}
 	}
+
+	if (IsIronman && lvl == 16)
+		InitDiabloMsg("Diablo must be killed last, or else you die");
 }
 
 void RestartTownLvl(Player &player)

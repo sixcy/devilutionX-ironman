@@ -211,7 +211,7 @@ bool MonsterMHit(int pnum, int monsterId, int mindam, int maxdam, int dist, Miss
 
 	int hit = GenerateRnd(100);
 	int hper = 0;
-	const Player &player = Players[pnum];
+	Player &player = Players[pnum];
 	const MissileData &missileData = GetMissileData(t);
 	if (missileData.isArrow()) {
 		hper = player.GetRangedPiercingToHit();

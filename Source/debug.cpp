@@ -1085,7 +1085,7 @@ std::string DebugCmdBreakAllBarrels(const string_view /*parameter*/)
 
 std::string DebugCmdKillAll(const string_view parameter)
 {
-	const Player &myPlayer = *MyPlayer;
+	Player &myPlayer = *MyPlayer;
 	int countKilled = 0;
 	for (size_t i = 0; i < ActiveMonsterCount; i++) {
 		int mIndex = ActiveMonsters[i];

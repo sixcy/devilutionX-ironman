@@ -24,7 +24,9 @@
 #include "engine/render/clx_render.hpp"
 #include "engine/sound_position.hpp"
 #include "engine/world_tile.hpp"
+#include "error.h"
 #include "init.h"
+#include "ironman.h"
 #include "levels/crypt.h"
 #include "levels/drlg_l4.h"
 #include "levels/themes.h"
@@ -34,6 +36,7 @@
 #include "missiles.h"
 #include "movie.h"
 #include "options.h"
+#include "player.h"
 #include "qol/floatingnumbers.h"
 #include "spelldat.h"
 #include "storm/storm_net.hpp"
@@ -3727,8 +3730,14 @@ void KillMyGolem()
 	M_StartKill(golem, *MyPlayer);
 }
 
-void M_StartKill(Monster &monster, const Player &player)
+void M_StartKill(Monster &monster, Player &player)
 {
+	// Ironman: if Diablo was killed before all other monsters, kill the player
+	if (IsIronman && ActiveMonsterCount > MAX_PLRS + 1 && monster.type().type == MT_DIABLO) {
+		StartPlayerKill(player, DeathReason::Unknown);
+		InitDiabloMsg("Game over! Diablo must be killed last");
+		return;
+	}
 	StartMonsterDeath(monster, player, true);
 }
 
