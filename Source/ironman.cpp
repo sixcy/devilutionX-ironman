@@ -19,7 +19,8 @@ static bool LevelIsClearChests()
 	return RemainingChestCount <= 0;
 }
 
-bool LevelIsClear(){
+bool LevelIsClear()
+{
 	return LevelIsClearMonsters() && LevelIsClearBarrels() && LevelIsClearChests();
 }
 
@@ -39,4 +40,4 @@ std::string SelectImMsg()
 	return msg;
 }
 
-}
+} // namespace devilution
