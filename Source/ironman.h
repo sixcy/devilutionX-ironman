@@ -7,4 +7,4 @@ constexpr bool IsIronman = true;
 bool LevelIsClear();
 std::string SelectImMsg();
 
-}
+} // namespace devilution
