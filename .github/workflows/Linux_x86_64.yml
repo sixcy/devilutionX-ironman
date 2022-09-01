@@ -3,7 +3,7 @@ name: Linux x86_64 (x86_64-linux-gnu)
 on:
   push:
     branches:
-      - master
+      - ironman
     paths-ignore:
       - '*.md'
   pull_request:

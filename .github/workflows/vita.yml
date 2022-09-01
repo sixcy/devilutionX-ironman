@@ -4,7 +4,7 @@ name: Sony PlayStation Vita
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
-      - master
+      - ironman
     paths-ignore:
       - '*.md'
       - 'docs/**'

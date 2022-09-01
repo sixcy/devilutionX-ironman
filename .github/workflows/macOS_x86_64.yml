@@ -3,7 +3,7 @@ name: macOS x86_64
 on:
   push:
     branches:
-      - master
+      - ironman
     paths-ignore:
       - '*.md'
   pull_request:
