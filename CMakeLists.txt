@@ -89,6 +89,7 @@ RELEASE_OPTION(CPACK "Configure CPack")
 include(VcPkgManifestFeatures)
 
 # Set up the `project` early so that properties such as `TARGET_SUPPORTS_SHARED_LIBS` are defined.
+set(VERSION_NUM 1.4.1) # FIXME - hardcoded for ironman mod
 if(NOT VERSION_NUM)
   include(functions/git)
   get_git_tag(VERSION_NUM)
