@@ -1,5 +1,6 @@
 #include "ironman.h"
 #include "multi.h"
+#include "player.h"
 #include "utils/language.h"
 
 namespace devilution {
@@ -19,9 +20,15 @@ static bool LevelIsClearChests()
 	return RemainingChestCount <= 0;
 }
 
-bool LevelIsClear()
+static bool LevelHasPlayers(uint8_t level)
 {
-	return LevelIsClearMonsters() && LevelIsClearBarrels() && LevelIsClearChests();
+	return std::any_of(std::cbegin(Players), std::cend(Players), [level](const Player &p) { return p.plrlevel == level; });
+}
+
+bool CurrentLevelIsClear(uint8_t nextLevel)
+{
+	bool multiplayerBypass = gbIsMultiplayer && LevelHasPlayers(nextLevel);
+	return multiplayerBypass || (LevelIsClearMonsters() && LevelIsClearBarrels() && LevelIsClearChests());
 }
 
 constexpr const char *ImMustKillAllMsg = "All monsters must be killed";
