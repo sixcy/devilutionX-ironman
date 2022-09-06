@@ -338,7 +338,7 @@ void CheckRportal()
 		if (missile._mitype == MissileID::RedPortal) {
 			if (EntranceBoundaryContains(missile.position.tile, cursPosition)) {
 				trigflag = true;
-				if (IsIronman && !LevelIsClear())
+				if (IsIronman && !CurrentLevelIsClear())
 					InfoString = SelectImMsg();
 				else {
 					InfoString = _("Portal to");
