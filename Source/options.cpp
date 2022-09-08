@@ -1931,9 +1931,16 @@ IronmanOptions::IronmanOptions()
     : OptionCategoryBase("Ironman", N_("Ironman"), N_("Ironman Settings"))
     , countersDisplayMode("Counters", OptionEntryFlags::None, N_("Display Counters"), N_("Display barrel/chest/monster counters when opening automap?"), IMCountersDisplayMode::All,
           {
-              { IMCountersDisplayMode::None, N_("Never") },
+              { IMCountersDisplayMode::None, N_("Never (vanilla)") },
               { IMCountersDisplayMode::Limited, N_("When less than 5 remains") },
               { IMCountersDisplayMode::All, N_("Always") },
+          })
+    , objectsHighlightMode("Objects Highlighting", OptionEntryFlags::None, N_("Highlight Objects"), N_("When should objects be highlighted?"), IMObjectsHighlightMode::WhenSafe,
+          {
+              { IMObjectsHighlightMode::WhenSafe, N_("When all monsters are killed") },
+              { IMObjectsHighlightMode::WhenAlt, N_("When pressing alt") },
+              { IMObjectsHighlightMode::WhenAltAndSafe, N_("Alt and all monsters killed") },
+              { IMObjectsHighlightMode::Never, N_("Never (vanilla)") },
           })
 {
 }
@@ -1942,6 +1949,7 @@ std::vector<OptionEntryBase *> IronmanOptions::GetEntries()
 {
 	return {
 		&countersDisplayMode,
+		&objectsHighlightMode,
 	};
 }
 

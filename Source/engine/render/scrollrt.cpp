@@ -25,6 +25,7 @@
 #include "hwcursor.hpp"
 #include "init.h"
 #include "inv.h"
+#include "ironman.h"
 #include "lighting.h"
 #include "minitext.h"
 #include "missiles.h"
@@ -484,7 +485,7 @@ void DrawObject(const Surface &out, Point tilePosition, Point targetBufferPositi
 		screenPosition -= worldOffset.worldToScreen();
 	}
 
-	if (&objectToDraw == ObjectUnderCursor) {
+	if ((ShouldHighlightObjects() && (objectToDraw.IsChest() || objectToDraw.IsSarcophagus() || objectToDraw.IsBarrel())) || &objectToDraw == ObjectUnderCursor) {
 		ClxDrawOutlineSkipColorZero(out, 194, screenPosition, sprite);
 	}
 	if (objectToDraw.applyLighting) {
