@@ -387,7 +387,7 @@ void ScrollSmithBuy(int idx)
 
 uint32_t TotalPlayerGold()
 {
-	return MyPlayer->_pGold + Stash.gold;
+	return MyPlayer->_pGold + (IsIronman ? 0 : Stash.gold);
 }
 
 // TODO: Change `_iIvalue` to be unsigned instead of passing `int` here.
