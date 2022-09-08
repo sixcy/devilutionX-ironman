@@ -249,7 +249,7 @@ void CheckRportal()
 				trigflag = true;
 				ClearPanel();
 
-				if (IsIronman && !LevelIsClear())
+				if (IsIronman && !CurrentLevelIsClear())
 					InfoString = SelectImMsg();
 				else {
 					InfoString = _("Portal to");

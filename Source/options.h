@@ -597,11 +597,19 @@ enum class IMCountersDisplayMode : int {
 	None,    // no display at all
 };
 
+enum class IMObjectsHighlightMode : int {
+	WhenAlt, // when pressing alt
+	WhenAltAndSafe,
+	WhenSafe, // when all monsters have been killed
+	Never,    // no object highlighting
+};
+
 struct IronmanOptions : OptionCategoryBase {
 	IronmanOptions();
 	std::vector<OptionEntryBase *> GetEntries() override;
 
 	OptionEntryEnum<IMCountersDisplayMode> countersDisplayMode;
+	OptionEntryEnum<IMObjectsHighlightMode> objectsHighlightMode;
 };
 
 struct Options {
