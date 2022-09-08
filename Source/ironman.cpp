@@ -1,6 +1,9 @@
 #include "ironman.h"
+#include "monster.h"
 #include "multi.h"
+#include "options.h"
 #include "player.h"
+#include "qol/itemlabels.h"
 #include "utils/language.h"
 
 namespace devilution {
@@ -58,6 +61,19 @@ bool CurrentLevelIsClear(uint8_t nextLevel)
 {
 	bool multiplayerBypass = gbIsMultiplayer && LevelIsClearedOrEntered(nextLevel);
 	return multiplayerBypass || (LevelIsClearMonsters() && LevelIsClearBarrels() && LevelIsClearChests());
+}
+
+bool ShouldHighlightObjects()
+{
+	if (!IsIronman)
+		return false;
+	auto objectsHighlightMode = *sgOptions.Ironman.objectsHighlightMode;
+	bool whenAlt = IsAnyOf(objectsHighlightMode, IMObjectsHighlightMode::WhenAltAndSafe, IMObjectsHighlightMode::WhenAlt);
+	bool whenSafe = IsAnyOf(objectsHighlightMode, IMObjectsHighlightMode::WhenAltAndSafe, IMObjectsHighlightMode::WhenSafe);
+	return !(
+	    (!whenAlt && !whenSafe)
+	    || (whenAlt && !IsHighlightingLabelsEnabled())
+	    || (whenSafe && !LevelIsClearMonsters()));
 }
 
 constexpr const char *ImMustKillAllMsg = "All monsters must be killed";

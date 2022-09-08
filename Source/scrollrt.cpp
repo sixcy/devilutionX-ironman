@@ -23,6 +23,7 @@
 #include "hwcursor.hpp"
 #include "init.h"
 #include "inv.h"
+#include "ironman.h"
 #include "lighting.h"
 #include "minitext.h"
 #include "missiles.h"
@@ -630,7 +631,8 @@ void DrawObject(const Surface &out, Point tilePosition, Point targetBufferPositi
 	}
 
 	CelSprite cel { objectToDraw._oAnimData, objectToDraw._oAnimWidth };
-	if (pcursobj != -1 && &objectToDraw == &Objects[pcursobj]) {
+	if ((ShouldHighlightObjects() && (objectToDraw.IsChest() || objectToDraw.IsSarcophagus() || objectToDraw.IsBarrel()))
+	    || (pcursobj != -1 && &objectToDraw == &Objects[pcursobj])) {
 		CelBlitOutlineTo(out, 194, screenPosition, cel, objectToDraw._oAnimFrame);
 	}
 	if (objectToDraw._oLight) {
