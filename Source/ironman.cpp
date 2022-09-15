@@ -23,14 +23,43 @@ static bool LevelIsClearChests()
 	return RemainingChestCount <= 0;
 }
 
-static bool LevelHasPlayers(uint8_t level)
+static bool LevelDeq(uint8_t a, uint8_t b) // Is 'a' deeper or equal than 'b'?
 {
-	return std::any_of(std::cbegin(Players), std::cend(Players), [level](const Player &p) { return p.plrlevel == level; });
+	constexpr uint8_t HiveStart = 17;
+	constexpr uint8_t CryptStart = 21;
+
+	if (a >= CryptStart) {
+		if (b >= CryptStart) {
+			return a >= b;
+		}
+		return false;
+	}
+
+	assert(a < CryptStart);
+	if (a >= HiveStart) {
+		if (b >= HiveStart && b < CryptStart)
+			return a >= b;
+		return false;
+	}
+
+	assert(a < HiveStart);
+	if (b < HiveStart)
+		return a >= b;
+
+	return false;
+}
+
+static bool LevelIsClearedOrEntered(uint8_t level)
+{
+	/* A player has entered a deeper level than 'level'
+	 * implies that 'level' is either cleared or entered */
+	return std::any_of(std::cbegin(Players), std::cend(Players),
+	    [level](const Player &p) { return LevelDeq(p.plrlevel, level); });
 }
 
 bool CurrentLevelIsClear(uint8_t nextLevel)
 {
-	bool multiplayerBypass = gbIsMultiplayer && LevelHasPlayers(nextLevel);
+	bool multiplayerBypass = gbIsMultiplayer && LevelIsClearedOrEntered(nextLevel);
 	return multiplayerBypass || (LevelIsClearMonsters() && LevelIsClearBarrels() && LevelIsClearChests());
 }
 
