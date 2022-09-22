@@ -37,3 +37,14 @@ jobs:
         name: devilutionx.pkg
         path: build-ps4/devilutionx.pkg
 
+    - name: Update Release
+      if: ${{ github.event_name == 'release' && github.event.action == 'created' && !env.ACT }}
+      uses: ncipollo/release-action@v1
+      with:
+        name: devilutionx.pkg
+        artifacts: "build-ps4/devilutionx.pkg"
+        allowUpdates: true
+        omitBody: true
+        omitName: true
+        omitPrereleaseDuringUpdate: true
+        token: ${{ secrets.GITHUB_TOKEN }}

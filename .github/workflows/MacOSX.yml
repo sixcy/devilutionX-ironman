@@ -53,3 +53,15 @@ jobs:
       with:
         name: devilutionx.dmg
         path: ${{github.workspace}}/build/devilutionx.dmg
+
+    - name: Update Release
+      if: ${{ github.event_name == 'release' && github.event.action == 'created' && !env.ACT }}
+      uses: ncipollo/release-action@v1
+      with:
+        name: devilutionx.dmg
+        artifacts: "${{github.workspace}}/build/devilutionx.dmg"
+        allowUpdates: true
+        omitBody: true
+        omitName: true
+        omitPrereleaseDuringUpdate: true
+        token: ${{ secrets.GITHUB_TOKEN }}

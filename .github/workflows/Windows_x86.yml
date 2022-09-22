@@ -39,3 +39,15 @@ jobs:
       with:
         name: devilutionx_x86.zip
         path: build/devilutionx.zip
+
+    - name: Update Release
+      if: ${{ github.event_name == 'release' && github.event.action == 'created' && !env.ACT }}
+      uses: ncipollo/release-action@v1
+      with:
+        name: devilutionx_x86.zip
+        artifacts: "build/devilutionx.zip"
+        allowUpdates: true
+        omitBody: true
+        omitName: true
+        omitPrereleaseDuringUpdate: true
+        token: ${{ secrets.GITHUB_TOKEN }}
