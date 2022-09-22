@@ -1,6 +1,7 @@
 #include "ironman.h"
 #include "monster.h"
 #include "multi.h"
+#include "objdat.h"
 #include "options.h"
 #include "player.h"
 #include "qol/itemlabels.h"
@@ -10,7 +11,7 @@ namespace devilution {
 
 static bool LevelIsClearMonsters()
 {
-	return ActiveMonsterCount <= MAX_PLRS;
+	return GetHostileMonsterCount() <= 0;
 }
 
 static bool LevelIsClearBarrels()
@@ -90,6 +91,12 @@ std::string SelectImMsg()
 	if (!LevelIsClearChests())
 		msg += (msg.empty() ? "" : "\n") + _(ImMustOpenAllChests);
 	return msg;
+}
+
+int GetHostileMonsterCount()
+{
+	int lachdananDiff = Quests[Q_VEIL].IsAvailable() ? 1 : 0;
+	return ActiveMonsterCount - MAX_PLRS - lachdananDiff;
 }
 
 } // namespace devilution
