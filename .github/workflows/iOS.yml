@@ -1,6 +1,8 @@
 name: iOS
 
 on:
+  release:
+    types: [created]
   push:
     branches:
       - ironman

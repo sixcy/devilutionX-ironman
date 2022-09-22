@@ -1,6 +1,8 @@
 name: MacOSX
 
 on:
+  release:
+    types: [created]
   push:
     branches:
       - ironman
