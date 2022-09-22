@@ -7,5 +7,6 @@ constexpr bool IsIronman = true;
 bool CurrentLevelIsClear(uint8_t nextLevel = -1);
 std::string SelectImMsg();
 bool ShouldHighlightObjects();
+int GetHostileMonsterCount();
 
 } // namespace devilution

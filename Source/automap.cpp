@@ -803,7 +803,7 @@ void DrawAutomapText(const Surface &out)
 	linePosition.x += GetScreenWidth() - 180;
 
 	// Do not count the golems
-	int actualMonsterCount = (int)ActiveMonsterCount - MAX_PLRS;
+	int actualMonsterCount = GetHostileMonsterCount();
 	std::string monsterCountDesc = (lessThanFive && actualMonsterCount > 5) ? std::string(_("Monsters Left: ??")) : fmt::format(fmt::runtime(_("Monsters Left: {:d}")), actualMonsterCount);
 	DrawString(out, monsterCountDesc, linePosition);
 	linePosition.y += 15;
