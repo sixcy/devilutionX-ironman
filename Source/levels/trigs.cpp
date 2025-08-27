@@ -153,9 +153,9 @@ void InitL1Triggers()
 	numtrigs = 0;
 	for (WorldTileCoord j = 0; j < MAXDUNY; j++) {
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
-			if (!IsIronman && dPiece[i][j] == 128) {
+			if (dPiece[i][j] == 128) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 			if (dPiece[i][j] == 114) {
@@ -203,7 +203,7 @@ void InitL3Triggers()
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
 			if (dPiece[i][j] == 170) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
@@ -215,7 +215,7 @@ void InitL3Triggers()
 
 			if (dPiece[i][j] == 548) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				numtrigs++;
 			}
 		}
@@ -268,7 +268,7 @@ void InitHiveTriggers()
 		for (WorldTileCoord i = 0; i < MAXDUNX; i++) {
 			if (dPiece[i][j] == 65) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 
@@ -280,7 +280,7 @@ void InitHiveTriggers()
 
 			if (dPiece[i][j] == 79) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABTWARPUP;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABTWARPUP;
 				numtrigs++;
 			}
 		}
@@ -301,7 +301,7 @@ void InitCryptTriggers()
 			}
 			if (dPiece[i][j] == 157) {
 				trigs[numtrigs].position = { i, j };
-				trigs[numtrigs]._tmsg = WM_DIABPREVLVL;
+				trigs[numtrigs]._tmsg = IsIronman ? WM_DIABNOTRIGGER : WM_DIABPREVLVL;
 				numtrigs++;
 			}
 			if (dPiece[i][j] == 125) {
