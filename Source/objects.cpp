@@ -1306,14 +1306,8 @@ void AddSarcophagus(Object &sarcophagus)
 	dObject[sarcophagus.position.x][sarcophagus.position.y - 1] = -(sarcophagus.GetId() + 1);
 	sarcophagus._oVar1 = GenerateRnd(10);
 	sarcophagus._oRndSeed = AdvanceRndSeed();
-	if (sarcophagus._oVar1 >= 8) {
-		Monster *monster = PreSpawnSkeleton();
-		if (monster != nullptr) {
-			sarcophagus._oVar2 = monster->getId();
-		} else {
-			sarcophagus._oVar2 = -1;
-		}
-	}
+	if (sarcophagus._oVar1 >= 8)
+		sarcophagus._oVar2 = 1;
 	RemainingChestCount++;
 }
 
@@ -1391,14 +1385,8 @@ void AddBarrel(Object &barrel)
 	barrel._oVar2 = barrel.isExplosive() ? 0 : GenerateRnd(10);
 	barrel._oVar3 = GenerateRnd(3);
 
-	if (barrel._oVar2 >= 8) {
-		Monster *skeleton = PreSpawnSkeleton();
-		if (skeleton != nullptr) {
-			barrel._oVar4 = skeleton->getId();
-		} else {
-			barrel._oVar4 = -1;
-		}
-	}
+	if (barrel._oVar2 >= 8)
+		barrel._oVar4 = 1;
 
 	// How item loading works:
 	//   1) The item is generated with default parameters
@@ -2312,8 +2300,8 @@ void OperateSarcophagus(Object &sarcophagus, bool sendMsg, bool sendLootMsg)
 	SetRndSeed(sarcophagus._oRndSeed);
 	if (sarcophagus._oVar1 <= 2)
 		CreateRndItem(sarcophagus.position, false, sendLootMsg, false);
-	if (sarcophagus._oVar1 >= 8 && sarcophagus._oVar2 >= 0)
-		ActivateSkeleton(Monsters[sarcophagus._oVar2], sarcophagus.position);
+	if (sarcophagus._oVar1 >= 8 && sarcophagus._oVar2 == 1)
+		SpawnSkeleton(sarcophagus.position, Direction::South);
 	if (sendMsg)
 		NetSendCmdLoc(MyPlayerId, false, CMD_OPERATEOBJ, sarcophagus.position);
 	RemainingChestCount--;
@@ -3633,8 +3621,8 @@ void BreakBarrel(const Player &player, Object &barrel, bool forcebreak, bool sen
 			else
 				CreateRndItem(barrel.position, false, sendmsg, false);
 		}
-		if (barrel._oVar2 >= 8 && barrel._oVar4 >= 0)
-			ActivateSkeleton(Monsters[barrel._oVar4], barrel.position);
+		if (barrel._oVar2 >= 8 && barrel._oVar4 == 1)
+			SpawnSkeleton(barrel.position, Direction::South);
 	}
 	if (&player == MyPlayer) {
 		NetSendCmdLoc(MyPlayerId, false, CMD_BREAKOBJ, barrel.position);

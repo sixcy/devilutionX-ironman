@@ -520,6 +520,7 @@ bool IsGoat(_monster_id mt);
  */
 void ActivateSkeleton(Monster &monster, Point position);
 Monster *PreSpawnSkeleton();
+void SpawnSkeleton(Point position, Direction dir);
 void TalktoMonster(Player &player, Monster &monster);
 void SpawnGolem(Player &player, Monster &golem, Point position, Missile &missile);
 bool CanTalkToMonst(const Monster &monster);

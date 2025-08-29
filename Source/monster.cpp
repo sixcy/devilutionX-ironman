@@ -1565,13 +1565,6 @@ Monster *AddSkeleton(Point position, Direction dir, bool inMap)
 	return AddMonster(position, dir, typeIndex, inMap);
 }
 
-void SpawnSkeleton(Point position, Direction dir)
-{
-	Monster *skeleton = AddSkeleton(position, dir, true);
-	if (skeleton != nullptr)
-		StartSpecialStand(*skeleton, dir);
-}
-
 bool IsLineNotSolid(Point startPoint, Point endPoint)
 {
 	return LineClear(IsTileNotSolid, startPoint, endPoint);
@@ -3112,6 +3105,13 @@ bool UpdateModeStance(Monster &monster)
 }
 
 } // namespace
+
+void SpawnSkeleton(Point position, Direction dir)
+{
+	Monster *skeleton = AddSkeleton(position, dir, true);
+	if (skeleton != nullptr)
+		StartSpecialStand(*skeleton, dir);
+}
 
 void InitTRNForUniqueMonster(Monster &monster)
 {
