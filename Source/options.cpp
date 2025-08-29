@@ -1929,6 +1929,7 @@ std::optional<Resampler> ResamplerFromString(string_view resampler)
 
 IronmanOptions::IronmanOptions()
     : OptionCategoryBase("Ironman", N_("Ironman"), N_("Ironman Settings"))
+    , runInDungeon("Run in dungeon", OptionEntryFlags::None, N_("Run in dungeon"), N_("Whether the character runs in dungeon once it is clear of monsters"), true)
     , countersDisplayMode("Counters", OptionEntryFlags::None, N_("Display Counters"), N_("Display barrel/chest/monster counters when opening automap?"), IMCountersDisplayMode::All,
           {
               { IMCountersDisplayMode::None, N_("Never (vanilla)") },
@@ -1948,6 +1949,7 @@ IronmanOptions::IronmanOptions()
 std::vector<OptionEntryBase *> IronmanOptions::GetEntries()
 {
 	return {
+		&runInDungeon,
 		&countersDisplayMode,
 		&objectsHighlightMode,
 	};

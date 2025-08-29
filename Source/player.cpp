@@ -165,7 +165,7 @@ void HandleWalkMode(Player &player, Direction dir)
 void StartWalkAnimation(Player &player, Direction dir, bool pmWillBeCalled)
 {
 	int8_t skippedFrames = -2;
-	if (leveltype == DTYPE_TOWN && sgGameInitInfo.bRunInTown != 0)
+	if ((IsIronman && LevelIsClearMonsters() && leveltype != DTYPE_TOWN && *sgOptions.Ironman.runInDungeon) || (leveltype == DTYPE_TOWN && sgGameInitInfo.bRunInTown != 0))
 		skippedFrames = 3;
 	else if (pmWillBeCalled)
 		skippedFrames += 1;

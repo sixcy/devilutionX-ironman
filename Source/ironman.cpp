@@ -9,7 +9,7 @@
 
 namespace devilution {
 
-static bool LevelIsClearMonsters()
+bool LevelIsClearMonsters()
 {
 	return GetHostileMonsterCount() <= 0;
 }

@@ -817,6 +817,7 @@ struct IronmanOptions : OptionCategoryBase {
 	IronmanOptions();
 	std::vector<OptionEntryBase *> GetEntries() override;
 
+	OptionEntryBoolean runInDungeon;
 	OptionEntryEnum<IMCountersDisplayMode> countersDisplayMode;
 	OptionEntryEnum<IMObjectsHighlightMode> objectsHighlightMode;
 };
